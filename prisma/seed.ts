@@ -224,7 +224,19 @@ async function seedLocations() {
       });
     }
   }
-  console.log(`✓ Locations (${locations.length})`);
+
+  // V2: ajouter les covers Unsplash
+  const covers: Record<string, string> = {
+    'sauna-hammam':   'https://images.unsplash.com/photo-1583416750470-965b2707b355?w=1200&auto=format&fit=crop&q=80',
+    'piscine-jacuzzi':'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1200&auto=format&fit=crop&q=80',
+    'salle-de-sport': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&auto=format&fit=crop&q=80',
+    'espace-drague':  'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&auto=format&fit=crop&q=80',
+    'vestiaires':     'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&auto=format&fit=crop&q=80',
+  };
+  for (const [slug, coverImageUrl] of Object.entries(covers)) {
+    await prisma.location.update({ where: { slug }, data: { coverImageUrl } }).catch(() => null);
+  }
+  console.log(`✓ Locations (${locations.length}) + covers Unsplash`);
 }
 
 async function seedRecurringEvents() {

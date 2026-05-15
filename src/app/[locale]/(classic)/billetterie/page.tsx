@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { formatPrice } from '@/lib/format';
 import BuyButton from '@/components/BuyButton';
 import { isStripeReady } from '@/lib/stripe';
+import { PageHero } from '@/components/PageHero';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -25,13 +26,8 @@ export default async function BilletteriePage({ params }: { params: Promise<{ lo
 
   return (
     <section className="section">
-      <p className="eyebrow mb-3">Sun City</p>
-      <h1 className="font-display text-4xl md:text-5xl mb-4">{locale === 'fr' ? 'Billetterie en ligne' : 'Online tickets'}</h1>
-      <p className="text-textMuted max-w-2xl mb-10">
-        {locale === 'fr'
-          ? 'Achète ton entrée en quelques clics. Reçois ton QR code par email. Scan-le à l’arrivée pour skipper la file.'
-          : 'Buy your entry in clicks. Get your QR code by email. Scan it on arrival to skip the queue.'}
-      </p>
+      {/* @ts-expect-error async server */}
+      <PageHero eyebrow="Sun City" title={locale === 'fr' ? 'Billetterie en ligne' : 'Online tickets'} subtitle={locale === 'fr' ? 'Achète ton entrée en quelques clics. Reçois ton QR code par email.' : 'Buy your entry in clicks. Get your QR code by email.'} />
 
       {!stripeReady && (
         <div className="bg-warning/10 border border-warning/40 text-warning rounded-lg p-4 mb-6 text-sm">

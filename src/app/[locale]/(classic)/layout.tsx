@@ -1,22 +1,18 @@
 export const dynamic = 'force-dynamic';
 
 import Script from 'next/script';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import AgeGate from '@/components/AgeGate';
-import AskSunCityWidget from '@/components/AskSunCityWidget';
 import { localBusinessJsonLd } from '@/lib/jsonld';
+import { SkinAwareChrome } from '@/components/SkinAwareChrome';
 import type { ReactNode } from 'react';
 
-export default function ClassicLayout({ children }: { children: ReactNode }) {
+export default async function ClassicLayout({ children, params }: { children: ReactNode; params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   return (
     <>
-      <a href="#main" className="skip-link">Skip to content</a>
-      <Header />
-      <main id="main">{children}</main>
-      <Footer />
-      <AgeGate />
-      <AskSunCityWidget />
+      {/* @ts-expect-error async server component */}
+      <SkinAwareChrome locale={locale}>
+        {children}
+      </SkinAwareChrome>
       <Script id="ld-localbusiness" type="application/ld+json" strategy="afterInteractive">
         {JSON.stringify(localBusinessJsonLd())}
       </Script>

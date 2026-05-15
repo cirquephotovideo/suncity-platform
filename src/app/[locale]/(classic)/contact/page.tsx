@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import ContactForm from '@/components/ContactForm';
+import { PageHero } from '@/components/PageHero';
 import { prisma } from '@/lib/prisma';
 import { Phone, MapPin, Mail } from 'lucide-react';
 
@@ -18,9 +19,8 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
   return (
     <section className="section">
-      <p className="eyebrow mb-3">Sun City</p>
-      <h1 className="font-display text-4xl md:text-5xl mb-4">{t('title')}</h1>
-      <p className="text-textMuted mb-10 max-w-2xl">{t('intro')}</p>
+      {/* @ts-expect-error async server */}
+      <PageHero eyebrow="Sun City" title={t('title')} subtitle={t('intro')} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <ContactForm />

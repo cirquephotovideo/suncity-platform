@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { prisma } from '@/lib/prisma';
 import { formatPrice } from '@/lib/format';
+import { PageHero } from '@/components/PageHero';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -21,9 +22,8 @@ export default async function TariffsPage({ params }: { params: Promise<{ locale
 
   return (
     <section className="section">
-      <p className="eyebrow mb-3">Sun City</p>
-      <h1 className="font-display text-4xl md:text-5xl mb-4">{t('title')}</h1>
-      <p className="text-textMuted mb-10">{t('intro')}</p>
+      {/* @ts-expect-error async server */}
+      <PageHero eyebrow="Sun City" title={t('title')} subtitle={t('intro')} />
 
       <div className="overflow-x-auto rounded-lg border border-border">
         <table className="w-full text-sm">
