@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { generateHfVideo, type HfModel, type HfMotion } from '@/lib/higgsfield';
+import { generateVideo, type VideoProvider, type HfModel, type HfMotion } from '@/lib/ai-media';
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -13,23 +13,25 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json().catch(() => null) as {
     prompt?: string;
-    preset?: string;
+    provider?: VideoProvider;
     higgsfield?: { model?: HfModel; duration?: number; motion?: HfMotion; loop?: boolean };
+    aspectRatio?: '16:9' | '9:16';
+    duration?: number;
   } | null;
 
   const prompt = body?.prompt?.trim();
   if (!prompt) return NextResponse.json({ error: 'prompt required' }, { status: 400 });
 
-  const hf = body?.higgsfield ?? {};
-  const result = await generateHfVideo({
+  const result = await generateVideo({
     prompt,
-    model: hf.model ?? 'higgsfield-lite',
-    duration: hf.duration ?? 5,
-    motion: hf.motion ?? 'medium',
-    loop: hf.loop ?? true,
+    provider: body?.provider,
+    aspectRatio: body?.aspectRatio,
+    duration: body?.duration ?? body?.higgsfield?.duration,
+    model: body?.higgsfield?.model,
+    motion: body?.higgsfield?.motion,
+    loop: body?.higgsfield?.loop,
   });
+  if (!result.ok) return NextResponse.json({ ok: false, error: result.error, provider: result.provider }, { status: 502 });
 
-  if (!result.ok) return NextResponse.json({ ok: false, error: result.error }, { status: 502 });
-
-  return NextResponse.json({ ok: true, videoUrl: result.videoUrl });
+  return NextResponse.json({ ok: true, videoUrl: result.videoUrl, provider: result.provider });
 }

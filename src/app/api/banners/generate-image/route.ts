@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { generateHfImage } from '@/lib/higgsfield';
+import { generateImage, type ImageProvider } from '@/lib/ai-media';
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -15,13 +15,18 @@ export async function POST(req: NextRequest) {
     prompt?: string;
     preset?: string;
     count?: number;
+    provider?: ImageProvider;
   } | null;
 
   const prompt = body?.prompt?.trim();
   if (!prompt) return NextResponse.json({ error: 'prompt required' }, { status: 400 });
 
-  const result = await generateHfImage({ prompt, count: body?.count ?? 2 });
-  if (!result.ok) return NextResponse.json({ ok: false, error: result.error }, { status: 502 });
+  const result = await generateImage({
+    prompt,
+    count: body?.count ?? 2,
+    provider: body?.provider,
+  });
+  if (!result.ok) return NextResponse.json({ ok: false, error: result.error, provider: result.provider }, { status: 502 });
 
-  return NextResponse.json({ ok: true, images: result.images });
+  return NextResponse.json({ ok: true, images: result.images, provider: result.provider });
 }

@@ -1,8 +1,29 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Save, X, Loader2, UploadCloud, Image as ImageIcon,
 } from 'lucide-react';
+
+// ─── Provider definitions ─────────────────────────────────────────────────────
+type ImageProvider = 'gemini' | 'higgsfield' | 'picsum';
+type VideoProvider = 'veo' | 'higgsfield' | 'sample';
+
+const IMAGE_PROVIDERS: { slug: ImageProvider; label: string; short: string }[] = [
+  { slug: 'gemini',     label: 'Gemini Nano Banana 2', short: 'Gemini' },
+  { slug: 'higgsfield', label: 'Higgsfield',           short: 'Higgsfield' },
+  { slug: 'picsum',     label: 'Picsum (stub)',        short: 'Picsum stub' },
+];
+
+const VIDEO_PROVIDERS: { slug: VideoProvider; label: string; short: string }[] = [
+  { slug: 'veo',        label: 'Google Veo 3', short: 'Veo' },
+  { slug: 'higgsfield', label: 'Higgsfield',   short: 'Higgsfield' },
+  { slug: 'sample',     label: 'Sample MP4',   short: 'Sample MP4' },
+];
+
+type ProvidersAvailability = {
+  image: { gemini: boolean; higgsfield: boolean; picsum: boolean };
+  video: { veo: boolean; higgsfield: boolean; sample: boolean };
+};
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type BannerRich = {
@@ -182,6 +203,47 @@ export function BannerEditor({ banner, onClose, onSaved }: BannerEditorProps) {
   const [hfMotion, setHfMotion] = useState<'low' | 'medium' | 'high'>('medium');
   const [hfLoop, setHfLoop] = useState(true);
 
+  // Provider availability + selection
+  const [providers, setProviders] = useState<ProvidersAvailability>({
+    image: { gemini: true, higgsfield: true, picsum: true },
+    video: { veo: true, higgsfield: true, sample: true },
+  });
+  const [imageProvider, setImageProvider] = useState<ImageProvider>('gemini');
+  const [videoProvider, setVideoProvider] = useState<VideoProvider>('veo');
+  const [lastUsedProvider, setLastUsedProvider] = useState<{ kind: 'image' | 'video'; slug: string; label: string } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/banners/providers')
+      .then(r => r.ok ? r.json() : null)
+      .then(j => {
+        if (cancelled || !j?.ok || !j.providers) return;
+        const av: ProvidersAvailability = {
+          image: {
+            gemini: !!j.providers.image?.gemini,
+            higgsfield: !!j.providers.image?.higgsfield,
+            picsum: j.providers.image?.picsum !== false,
+          },
+          video: {
+            veo: !!j.providers.video?.veo,
+            higgsfield: !!j.providers.video?.higgsfield,
+            sample: j.providers.video?.sample !== false,
+          },
+        };
+        setProviders(av);
+        // Pick best default for image
+        if (av.image.gemini) setImageProvider('gemini');
+        else if (av.image.higgsfield) setImageProvider('higgsfield');
+        else setImageProvider('picsum');
+        // Pick best default for video
+        if (av.video.veo) setVideoProvider('veo');
+        else if (av.video.higgsfield) setVideoProvider('higgsfield');
+        else setVideoProvider('sample');
+      })
+      .catch(() => { /* keep optimistic defaults */ });
+    return () => { cancelled = true; };
+  }, []);
+
   // Activation calendar
   const [activeFrom, setActiveFrom] = useState(
     banner?.startsAt ? new Date(banner.startsAt).toISOString().slice(0, 16) : ''
@@ -241,6 +303,7 @@ export function BannerEditor({ banner, onClose, onSaved }: BannerEditorProps) {
       const endpoint = kind === 'image'
         ? '/api/banners/generate-image'
         : '/api/banners/generate-video';
+      const provider = kind === 'image' ? imageProvider : videoProvider;
       const r = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -248,6 +311,7 @@ export function BannerEditor({ banner, onClose, onSaved }: BannerEditorProps) {
           prompt: aiPrompt || `Bannière Sun City Paris ${presetSlug}`,
           preset: presetSlug || undefined,
           count: 2,
+          provider,
           higgsfield: kind === 'video'
             ? { model: hfModel, duration: hfDuration, motion: hfMotion, loop: hfLoop }
             : undefined,
@@ -258,6 +322,11 @@ export function BannerEditor({ banner, onClose, onSaved }: BannerEditorProps) {
         alert(j.error ?? `Génération échouée (HTTP ${r.status})`);
         return;
       }
+      const usedSlug: string = j.provider ?? provider;
+      const def = kind === 'image'
+        ? IMAGE_PROVIDERS.find(p => p.slug === usedSlug)
+        : VIDEO_PROVIDERS.find(p => p.slug === usedSlug);
+      setLastUsedProvider({ kind, slug: usedSlug, label: def?.label ?? usedSlug });
       if (kind === 'video' && j.videoUrl) {
         setVideoUrl(j.videoUrl);
         setMediaTab('video');
@@ -611,6 +680,60 @@ export function BannerEditor({ banner, onClose, onSaved }: BannerEditorProps) {
               ))}
             </div>
 
+            {/* Provider selectors */}
+            <div className="space-y-1.5">
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-textMuted mb-1">Provider image</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {IMAGE_PROVIDERS.map(p => {
+                    const available = providers.image[p.slug];
+                    const selected = imageProvider === p.slug;
+                    return (
+                      <button
+                        key={p.slug}
+                        type="button"
+                        onClick={() => available && setImageProvider(p.slug)}
+                        disabled={!available}
+                        title={available ? p.label : 'Clé API non configurée'}
+                        className={`text-[11px] px-2.5 py-1 rounded-full border transition-colors ${
+                          selected
+                            ? 'bg-primary text-bg border-primary font-bold'
+                            : 'bg-bg border-border text-textMuted hover:text-text'
+                        } ${!available ? 'opacity-40 cursor-not-allowed' : ''}`}
+                      >
+                        {p.short}{!available && p.slug !== 'picsum' ? ' (clé manquante)' : ''}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-textMuted mb-1">Provider vidéo</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {VIDEO_PROVIDERS.map(p => {
+                    const available = providers.video[p.slug];
+                    const selected = videoProvider === p.slug;
+                    return (
+                      <button
+                        key={p.slug}
+                        type="button"
+                        onClick={() => available && setVideoProvider(p.slug)}
+                        disabled={!available}
+                        title={available ? p.label : 'Clé API non configurée'}
+                        className={`text-[11px] px-2.5 py-1 rounded-full border transition-colors ${
+                          selected
+                            ? 'bg-primary text-bg border-primary font-bold'
+                            : 'bg-bg border-border text-textMuted hover:text-text'
+                        } ${!available ? 'opacity-40 cursor-not-allowed' : ''}`}
+                      >
+                        {p.short}{!available && p.slug !== 'sample' ? ' (clé manquante)' : ''}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
             {/* Prompt */}
             <textarea
               value={aiPrompt}
@@ -621,7 +744,7 @@ export function BannerEditor({ banner, onClose, onSaved }: BannerEditorProps) {
             />
 
             {/* Generate buttons */}
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap items-center">
               <button
                 type="button"
                 onClick={() => generateAI('image')}
@@ -629,7 +752,9 @@ export function BannerEditor({ banner, onClose, onSaved }: BannerEditorProps) {
                 className="bg-primary hover:opacity-90 disabled:opacity-50 text-bg text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5"
               >
                 {aiBusy === 'image' ? <Loader2 size={11} className="animate-spin" /> : '🖼'}
-                {aiBusy === 'image' ? 'Génération…' : 'Générer image'}
+                {aiBusy === 'image'
+                  ? 'Génération…'
+                  : `Générer image (${IMAGE_PROVIDERS.find(p => p.slug === imageProvider)?.short ?? imageProvider})`}
               </button>
               <button
                 type="button"
@@ -638,8 +763,15 @@ export function BannerEditor({ banner, onClose, onSaved }: BannerEditorProps) {
                 className="bg-secondary hover:opacity-90 disabled:opacity-50 text-bg text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5"
               >
                 {aiBusy === 'video' ? <Loader2 size={11} className="animate-spin" /> : '🎥'}
-                {aiBusy === 'video' ? 'Génération…' : 'Générer vidéo (Higgsfield)'}
+                {aiBusy === 'video'
+                  ? 'Génération…'
+                  : `Générer vidéo (${VIDEO_PROVIDERS.find(p => p.slug === videoProvider)?.short ?? videoProvider})`}
               </button>
+              {lastUsedProvider && (
+                <span className="text-[10px] text-success font-medium">
+                  Généré via {lastUsedProvider.label} ✓
+                </span>
+              )}
             </div>
 
             {/* Higgsfield video params */}
