@@ -20,6 +20,8 @@ const config: Config = {
       fontFamily: {
         display: ['var(--font-display)', 'serif'],
         body: ['var(--font-body)', 'sans-serif'],
+        unbounded: ['var(--font-unbounded)', 'sans-serif'],
+        bigShoulders: ['var(--font-big-shoulders)', 'sans-serif'],
       },
       maxWidth: { prose: '70ch' },
       typography: () => ({
