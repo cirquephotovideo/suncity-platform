@@ -8,6 +8,7 @@ import { routing } from '@/i18n/routing';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AgeGate from '@/components/AgeGate';
+import AskSunCityWidget from '@/components/AskSunCityWidget';
 import { TopMarquee } from '@/components/HeroBanner';
 import { localBusinessJsonLd } from '@/lib/jsonld';
 import type { ReactNode } from 'react';
@@ -30,6 +31,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
       <main id="main">{children}</main>
       <Footer />
       <AgeGate />
+      <AskSunCityWidget />
       <Script id="ld-localbusiness" type="application/ld+json" strategy="afterInteractive">
         {JSON.stringify(localBusinessJsonLd())}
       </Script>

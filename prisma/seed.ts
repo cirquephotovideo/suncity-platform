@@ -116,7 +116,7 @@ async function seedPartners() {
   const partners = [
     { name: 'Playsafe', url: 'https://www.playsafe.fr', category: 'prevention', orderIndex: 1 },
     { name: 'AREMEDIA', url: 'https://www.aremedia.org', category: 'prevention', orderIndex: 2 },
-    { name: 'Star City', url: 'https://www.starcity.fr/', category: 'sister-venue', orderIndex: 3 },
+    { name: 'Star City', url: 'https://www.starcity.fr/', category: 'sister-venue', orderIndex: 3, logoUrl: 'http://www.starcity.fr/wp-content/uploads/sites/6/2017/11/starcity-logo.png' },
   ];
   for (const p of partners) {
     const existing = await prisma.partner.findFirst({ where: { name: p.name } });
@@ -452,6 +452,42 @@ function markdownToHtml(md: string): string {
     .split(/\n\n+/).map(p => p.trim().startsWith('<') ? p : `<p>${p}</p>`).join('\n');
 }
 
+
+async function seedBanners() {
+  const banners = [
+    {
+      slug: 'top-soiree-du-jour',
+      position: 'top',
+      active: true,
+      fr: { title: 'Ce soir : Mardi Nasty Boys · -26 ans : 10€', body: null, ctaLabel: null },
+      en: { title: 'Tonight: Tuesday Nasty Boys · Under 26: €10', body: null, ctaLabel: null },
+    },
+    {
+      slug: 'top-newsletter-promo',
+      position: 'top',
+      active: true,
+      fr: { title: 'Inscris-toi à la newsletter et reçois -20% sur ta prochaine entrée', body: null, ctaLabel: 'M\'inscrire' },
+      en: { title: 'Sign up to our newsletter and get -20% on your next entry', body: null, ctaLabel: 'Sign me up' },
+    },
+  ];
+  for (const b of banners) {
+    const created = await prisma.banner.upsert({
+      where: { slug: b.slug },
+      update: { position: b.position, active: b.active },
+      create: { slug: b.slug, position: b.position, active: b.active },
+    });
+    for (const lang of ['fr', 'en'] as const) {
+      const tr = b[lang];
+      await prisma.bannerTranslation.upsert({
+        where: { bannerId_locale: { bannerId: created.id, locale: lang } },
+        update: tr,
+        create: { bannerId: created.id, locale: lang, ...tr },
+      });
+    }
+  }
+  console.log(`✓ Banners (${banners.length})`);
+}
+
 async function main() {
   console.log('▶ Seeding Sun City Paris…');
   await seedAdmin();
@@ -463,6 +499,7 @@ async function main() {
   await seedTariffs();
   await seedProducts();
   await seedPages();
+  await seedBanners();
   console.log('✅ Seed complet.');
 }
 

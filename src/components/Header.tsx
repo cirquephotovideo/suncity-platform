@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link, usePathname } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
 import { Menu, X, Globe } from 'lucide-react';
+import SearchPalette from './SearchPalette';
 
 export default function Header() {
   const t = useTranslations('nav');
@@ -35,6 +36,7 @@ export default function Header() {
               {it.label}
             </Link>
           ))}
+          <SearchPalette />
           <Link href={pathname as any} locale={otherLocale} className="btn-ghost text-xs flex items-center gap-1.5">
             <Globe className="w-4 h-4" /> {otherLocale.toUpperCase()}
           </Link>
