@@ -3,23 +3,23 @@ set -e
 
 echo "▶ Sun City — entrypoint"
 
-# Si DATABASE_URL est définie : tenter migrate + seed avec retry sur DB pas encore prête
 if [ -n "${DATABASE_URL:-}" ]; then
   echo "▶ Waiting for database…"
   i=0
-  until npx prisma migrate deploy 2>/dev/null; do
+  until npx prisma db push --accept-data-loss --skip-generate --schema prisma/schema.prisma 2>&1; do
+    EC=$?
     i=$((i+1))
     if [ "$i" -gt 30 ]; then
-      echo "❌ Database unreachable after 30 attempts. Aborting."
+      echo "❌ Database push failed after 30 attempts. Aborting."
       exit 1
     fi
-    echo "  retry $i/30…"; sleep 2
+    echo "  retry $i/30 (last exit code: $EC)…"; sleep 2
   done
-  echo "✅ Migrations applied"
+  echo "✅ Database schema synced"
 
   if [ "${SKIP_SEED:-0}" != "1" ]; then
     echo "▶ Seeding (idempotent)"
-    npx tsx prisma/seed.ts || echo "⚠ seed failed (non-fatal)"
+    npx tsx prisma/seed.ts 2>&1 || echo "⚠ seed failed (non-fatal)"
   else
     echo "▶ Seed skipped (SKIP_SEED=1)"
   fi
