@@ -14,5 +14,7 @@ export const bucket = process.env.S3_BUCKET || 'suncity';
 export const publicBase = process.env.S3_PUBLIC_ENDPOINT || 'http://localhost:9000';
 
 export function publicUrl(key: string) {
-  return `${publicBase}/${bucket}/${key.replace(/^\//, '')}`;
+  // Always go through Next.js proxy /api/media — MinIO is not publicly exposed
+  // and S3_PUBLIC_ENDPOINT may point to a host that doesn't actually serve files.
+  return `/api/media/${key.replace(/^\//, '')}`;
 }

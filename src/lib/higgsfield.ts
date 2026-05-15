@@ -106,12 +106,14 @@ const STUB_QUERIES: Record<string, string> = {
 };
 
 async function stubGenerateImage(opts: HfImageOpts): Promise<HfImageResult> {
+  // Picsum Photos — free, reliable, no API key required.
+  // We seed each image with a hash of the prompt + index for deterministic-ish previews.
   const count = opts.count ?? 2;
-  const query = encodeURIComponent(opts.prompt.slice(0, 60));
+  const promptHash = Array.from(opts.prompt).reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0, 0);
   const images: { data: string; mimeType: string }[] = [];
   for (let i = 0; i < count; i++) {
-    const seed = Math.floor(Math.random() * 1000) + i;
-    const url = `https://source.unsplash.com/1280x720/?${query}&sig=${seed}`;
+    const seed = Math.abs(promptHash + i * 1009) % 10000;
+    const url = `https://picsum.photos/seed/sc${seed}/1280/720`;
     try {
       const data = await fetchBase64(url);
       images.push({ data, mimeType: 'image/jpeg' });
