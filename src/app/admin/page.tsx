@@ -64,13 +64,15 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      {/* Bandeau hero */}
-      <div className="rounded-xl p-6 mb-6 bg-gradient-to-r from-primary/40 via-secondary/30 to-primary/20 border border-primary/30">
-        <div className="flex items-center gap-3">
-          <BarChart3 className="w-8 h-8 text-primary" />
+      {/* Bandeau hero "neo" — gradient animé + glow */}
+      <div className="relative rounded-xl p-6 mb-6 overflow-hidden border border-primary/40 bg-gradient-to-r from-primary/30 via-secondary/40 to-primary/30 shadow-[0_0_60px_rgba(201,162,75,0.35)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(201,162,75,0.4),transparent_50%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(182,107,58,0.4),transparent_50%)] pointer-events-none" />
+        <div className="relative flex items-center gap-4">
+          <div className="w-14 h-14 rounded-xl bg-bg/60 border border-primary flex items-center justify-center text-3xl shadow-[0_0_30px_rgba(201,162,75,0.5)]">📊</div>
           <div>
-            <h1 className="font-display text-2xl">Tableau de bord</h1>
-            <p className="text-sm text-textMuted">Bienvenue {userName} · {now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
+            <h1 className="font-display text-3xl tracking-tight">Tableau de bord</h1>
+            <p className="text-sm text-textMuted mt-1">Bienvenue <span className="text-primary font-medium">{userName}</span> · {now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
           </div>
         </div>
       </div>

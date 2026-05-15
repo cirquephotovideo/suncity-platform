@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma';
-import Link from 'next/link';
 
 async function getActiveBanners(position: string) {
   try {
@@ -25,21 +24,28 @@ export async function TopMarquee({ locale }: { locale: string }) {
   const banners = await getActiveBanners('top');
   if (banners.length === 0) return null;
 
-  // On répète le contenu pour un effet marquee continu
   const items = banners.flatMap(b => b.translations.filter(t => t.locale === locale));
   if (items.length === 0) return null;
 
-  const content = items.map(it => it.title).join(' · ');
-  const repeated = Array.from({ length: 3 }, (_, i) => (
-    <span key={i} className="px-8 whitespace-nowrap">{content}</span>
-  ));
+  // Effet "neo" : gradient or/cuivre + glow + emojis qui scrollent
+  const content = items.map(it => {
+    const emoji = it.title.match(/^[\p{Extended_Pictographic}\p{Emoji}]+/u)?.[0] ?? '✨';
+    return `${emoji}  ${it.title}    `;
+  }).join('•    ');
 
   return (
-    <div className="bg-primary text-bg overflow-hidden text-xs font-medium py-2">
-      <div className="flex animate-marquee">{repeated}{repeated}</div>
+    <div className="relative bg-gradient-to-r from-primary via-secondary to-primary overflow-hidden text-bg text-xs font-medium py-2.5 shadow-[0_0_30px_rgba(201,162,75,0.6)]">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent animate-shimmer" />
+      <div className="relative flex animate-marquee">
+        <span className="px-8 whitespace-nowrap font-semibold tracking-wide">{content}</span>
+        <span className="px-8 whitespace-nowrap font-semibold tracking-wide">{content}</span>
+        <span className="px-8 whitespace-nowrap font-semibold tracking-wide">{content}</span>
+      </div>
       <style>{`
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-marquee { animation: marquee 30s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        .animate-marquee { animation: marquee 25s linear infinite; }
+        .animate-shimmer { animation: shimmer 4s linear infinite; }
       `}</style>
     </div>
   );
