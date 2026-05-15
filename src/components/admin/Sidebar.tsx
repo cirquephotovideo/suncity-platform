@@ -50,6 +50,7 @@ const GROUPS: Group[] = [
       { href: '/admin/telegram-bot', label: 'Bot Telegram', emoji: '✈️', soon: true },
       { href: '/admin/integrations', label: 'Intégrations', emoji: '🔌', soon: true },
       { href: '/admin/themes', label: 'Thèmes saisonniers', emoji: '🎨' },
+      { href: '/admin/skins', label: 'Skins du site', emoji: '🌈' },
       { href: '/admin/feature-flags', label: 'Feature flags', emoji: '🚥', soon: true },
       { href: '/admin/setup', label: 'Assistant configuration', emoji: '✨', soon: true },
     ],

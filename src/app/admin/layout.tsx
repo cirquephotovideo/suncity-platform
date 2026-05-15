@@ -4,12 +4,19 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import Link from 'next/link';
 import Sidebar from '@/components/admin/Sidebar';
+import { prisma } from '@/lib/prisma';
+import { getSkin } from '@/lib/skins';
 import type { ReactNode } from 'react';
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const session = await getServerSession(authOptions);
+  const settings = await prisma.siteSettings.findUnique({ where: { id: 1 } }).catch(() => null);
+  const skin = getSkin(settings?.themeKey);
   return (
-    <div className="min-h-screen bg-bg text-text flex flex-col">
+    <div className="min-h-screen bg-bg text-text flex flex-col" style={{ ['--skin-accent' as any]: skin.accent }}>
+      <div style={{ background: skin.accent, color: skin.bg, fontSize: 11, fontWeight: 600, letterSpacing: 1, textAlign: 'center', padding: '4px 8px' }}>
+        {skin.emoji} SKIN ACTIF · {skin.label.toUpperCase()} · <a href="/admin/skins" style={{ color: skin.bg, textDecoration: 'underline' }}>changer</a>
+      </div>
       <header className="border-b border-border bg-bgAlt/95 backdrop-blur sticky top-0 z-30">
         <div className="max-w-full mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/admin" className="flex items-center gap-2 font-display text-lg">
