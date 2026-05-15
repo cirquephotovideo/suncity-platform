@@ -1,39 +1,32 @@
 import type { Config } from 'tailwindcss';
 
-export default {
+const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        brand: {
-          pink: '#FF1493',
-          rose: '#FF4FA3',
-          dark: '#0A0A0A',
-          ink: '#111111'
-        }
+        bg: 'rgb(var(--bg) / <alpha-value>)',
+        bgAlt: 'rgb(var(--bg-alt) / <alpha-value>)',
+        text: 'rgb(var(--text) / <alpha-value>)',
+        textMuted: 'rgb(var(--text-muted) / <alpha-value>)',
+        primary: 'rgb(var(--primary) / <alpha-value>)',
+        secondary: 'rgb(var(--secondary) / <alpha-value>)',
+        accent: 'rgb(var(--accent) / <alpha-value>)',
+        border: 'rgb(var(--border) / <alpha-value>)',
+        success: 'rgb(var(--success) / <alpha-value>)',
+        danger: 'rgb(var(--danger) / <alpha-value>)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['"Space Grotesk"', 'Inter', 'sans-serif']
+        display: ['var(--font-display)', 'serif'],
+        body: ['var(--font-body)', 'sans-serif'],
       },
-      backgroundImage: {
-        'rainbow':
-          'linear-gradient(90deg,#ff0018 0%,#ffa52c 16%,#ffff41 33%,#008018 50%,#0000f9 66%,#86007d 83%,#ff0018 100%)',
-        'rainbow-radial':
-          'conic-gradient(from 0deg,#ff0018,#ffa52c,#ffff41,#008018,#0000f9,#86007d,#ff0018)'
-      },
-      animation: {
-        glow: 'glow 3s ease-in-out infinite',
-        spinSlow: 'spin 12s linear infinite'
-      },
-      keyframes: {
-        glow: {
-          '0%,100%': { filter: 'drop-shadow(0 0 10px rgba(255,20,147,.4))' },
-          '50%': { filter: 'drop-shadow(0 0 30px rgba(255,20,147,.9))' }
-        }
-      }
-    }
+      maxWidth: { prose: '70ch' },
+      typography: () => ({
+        DEFAULT: { css: { color: 'rgb(var(--text))', a: { color: 'rgb(var(--primary))' } } },
+      }),
+    },
   },
-  plugins: []
-} satisfies Config;
+  plugins: [],
+};
+export default config;

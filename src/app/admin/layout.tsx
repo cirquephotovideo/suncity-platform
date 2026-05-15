@@ -1,30 +1,23 @@
-import { AdminShell } from '@/components/AdminShell';
-import { Providers } from '@/components/Providers';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { getMenuPermissions, getUserMenuOverride } from '@/lib/menu-permissions';
-
-export const metadata = {
-  title: 'Back-office — Sun City Paris'
-};
 export const dynamic = 'force-dynamic';
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  // La redirection si pas connecté est gérée par middleware.ts (côté edge).
-  // Ce layout NE redéfinit PLUS <html>/<body> — c'est le root layout qui s'en charge,
-  // sinon Next.js 14 lève HierarchyRequestError ("only one element on document allowed")
-  // et affiche une page noire en prod.
-  const session = await getServerSession(authOptions);
-  const role = ((session?.user as any)?.role as string) || 'EDITOR';
-  const userId = (session?.user as any)?.id as string | undefined;
-  const [perms, userOverride] = await Promise.all([
-    getMenuPermissions().catch(() => ({ hidden: [], editorHidden: [] })),
-    getUserMenuOverride(userId).catch(() => null)
-  ]);
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import type { ReactNode } from 'react';
 
+export default async function AdminLayout({ children }: { children: ReactNode }) {
+  const session = await getServerSession(authOptions);
+  // /admin/login est servi indépendamment ; si on n'est pas connecté pour les autres routes, on redirige
   return (
-    <Providers>
-      <AdminShell role={role} perms={perms} userOverride={userOverride}>{children}</AdminShell>
-    </Providers>
+    <div className="min-h-screen bg-bg text-text">
+      <header className="border-b border-border bg-bgAlt">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <Link href="/admin" className="font-display text-xl text-primary">Sun City — BO</Link>
+          {session?.user && <span className="text-sm text-textMuted">{session.user.email}</span>}
+        </div>
+      </header>
+      <main className="max-w-6xl mx-auto px-4 py-8">{children}</main>
+    </div>
   );
 }

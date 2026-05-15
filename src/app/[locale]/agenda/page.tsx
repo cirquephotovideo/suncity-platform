@@ -1,25 +1,71 @@
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { prisma } from '@/lib/prisma';
-import { setRequestLocale } from 'next-intl/server';
-import { AgendaClient } from '@/components/AgendaClient';
+import { EventCard } from '@/components/EventCard';
 
-export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Agenda — Sun City Paris' };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'agenda' });
+  return { title: `${t('title')} — Sun City Paris`, description: t('intro') };
+}
 
 export default async function AgendaPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations('agenda');
 
-  let events: any[] = [];
-  try {
-    events = await prisma.event.findMany({
-      where: { published: true, startsAt: { gte: new Date() } },
-      include: {
-        venue: { select: { id: true, slug: true, name: true, type: true, city: true, country: true, coverImage: true } }
-      },
+  const [recurring, upcoming] = await Promise.all([
+    prisma.recurringEvent.findMany({
+      where: { active: true },
+      include: { translations: { where: { locale: locale as any } } },
+      orderBy: [{ dayOfWeek: 'asc' }, { orderIndex: 'asc' }],
+    }),
+    prisma.event.findMany({
+      where: { status: 'PUBLISHED', startsAt: { gte: new Date() } },
+      include: { translations: { where: { locale: locale as any } } },
       orderBy: { startsAt: 'asc' },
-      take: 200
-    });
-  } catch { events = []; }
+      take: 20,
+    }),
+  ]);
 
-  return <AgendaClient initial={events} />;
+  return (
+    <>
+      <section className="section text-center pb-8">
+        <p className="eyebrow mb-3">Sun City</p>
+        <h1 className="font-display text-4xl md:text-5xl mb-4">{t('title')}</h1>
+        <p className="text-textMuted max-w-2xl mx-auto">{t('intro')}</p>
+      </section>
+
+      <section className="section pt-0">
+        <h2 className="font-display text-2xl mb-6">{t('weekly')}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {recurring.map((r) => {
+            const tr = r.translations[0];
+            return tr ? (
+              <EventCard key={r.id} title={tr.title} summary={tr.summary} dayOfWeek={r.dayOfWeek as any}
+                weekOfMonth={r.weekOfMonth as any} startTime={r.startTime} endTime={r.endTime}
+                priceLabel={r.priceLabel} hostedBy={r.hostedBy} externalUrl={r.externalUrl} />
+            ) : null;
+          })}
+        </div>
+      </section>
+
+      <section className="section pt-0">
+        <h2 className="font-display text-2xl mb-6">{t('upcoming')}</h2>
+        {upcoming.length === 0 ? (
+          <p className="text-textMuted italic">{t('noEvents')}</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {upcoming.map((e) => {
+              const tr = e.translations[0];
+              return tr ? (
+                <EventCard key={e.id} title={tr.title} summary={tr.summary}
+                  startTime={e.startsAt.toISOString().slice(11, 16)}
+                  externalUrl={e.externalUrl} />
+              ) : null;
+            })}
+          </div>
+        )}
+      </section>
+    </>
+  );
 }

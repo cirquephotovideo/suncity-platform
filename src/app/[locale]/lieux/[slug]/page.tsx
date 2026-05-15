@@ -1,43 +1,36 @@
-import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
-import { VenueProfile } from '@/components/VenueProfile';
+import { setRequestLocale } from 'next-intl/server';
+import { prisma } from '@/lib/prisma';
+import { Link } from '@/i18n/routing';
 
-export const dynamic = 'force-dynamic';
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  try {
-    const v = await prisma.venue.findUnique({ where: { slug }, select: { name: true, shortDescription: true, description: true, coverImage: true, city: true } });
-    if (!v) return { title: 'Lieu introuvable · GLD' };
-    const desc = v.shortDescription || v.description?.slice(0, 160) || `${v.name} — lieu LGBT-friendly à découvrir sur Sun City Paris.`;
-    return {
-      title: `${v.name}${v.city ? ' · ' + v.city : ''} — GLD`,
-      description: desc,
-      openGraph: {
-        title: v.name,
-        description: desc,
-        images: v.coverImage ? [v.coverImage] : undefined
-      }
-    };
-  } catch {
-    return { title: 'Lieu · GLD' };
-  }
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+  const { locale, slug } = await params;
+  const loc = await prisma.location.findUnique({
+    where: { slug },
+    include: { translations: { where: { locale: locale as any } } },
+  });
+  const tr = loc?.translations[0];
+  if (!tr) return { title: 'Sun City Paris' };
+  return { title: `${tr.title} — Sun City Paris`, description: tr.summary };
 }
 
-export default async function VenuePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  let venue: any = null;
-  try {
-    venue = await prisma.venue.findUnique({
-      where: { slug },
-      include: {
-        events: { where: { published: true, startsAt: { gte: new Date() } }, orderBy: { startsAt: 'asc' } },
-        coupons: { where: { active: true } }
-      }
-    });
-    if (!venue) notFound();
-    await prisma.venue.update({ where: { id: venue.id }, data: { views: { increment: 1 } } }).catch(() => null);
-  } catch { notFound(); }
+export default async function LocationDetailPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
 
-  return <VenueProfile venue={venue} />;
+  const loc = await prisma.location.findUnique({
+    where: { slug },
+    include: { translations: { where: { locale: locale as any } } },
+  });
+  const tr = loc?.translations[0];
+  if (!loc || !tr) notFound();
+
+  return (
+    <article className="section max-w-prose">
+      <Link href="/lieux" className="text-sm text-textMuted hover:text-primary">← {locale === 'fr' ? 'Tous les lieux' : 'All places'}</Link>
+      <h1 className="font-display text-4xl md:text-5xl mt-4 mb-3">{tr.title}</h1>
+      <p className="text-lg text-textMuted mb-8">{tr.summary}</p>
+      <div className="prose prose-invert max-w-none whitespace-pre-line">{tr.contentMd}</div>
+    </article>
+  );
 }

@@ -1,89 +1,140 @@
 {
+  "site": {
+    "name": "Sun City Paris",
+    "tagline": "Paris' largest gay sauna — 3000 sqm on 3 floors",
+    "phone": "+33 1 40 09 26 09",
+    "address": "62 boulevard de Sébastopol, 75003 Paris",
+    "addressShort": "62 bd Sébastopol, Paris 3"
+  },
   "nav": {
     "home": "Home",
-    "message": "The message",
-    "argumentaire": "Argument",
-    "participate": "Participate",
-    "gallery": "Gallery",
-    "posters": "Posters",
-    "about": "About",
+    "agenda": "Events",
+    "places": "Places",
+    "tariffs": "Pricing",
+    "schedule": "Hours & access",
+    "rules": "Rules",
+    "checkin": "Check-in",
+    "contact": "Contact",
     "newsletter": "Newsletter",
-    "blog": "Blog"
+    "blog": "Blog",
+    "gallery": "Gallery",
+    "partners": "Partners",
+    "legal": "Legal notice",
+    "privacy": "Privacy"
+  },
+  "ageGate": {
+    "title": "Before you enter",
+    "body": "This site is strictly reserved for adults (+18) and contains adult content.",
+    "confirm": "I am 18 or older — enter",
+    "leave": "Leave the site"
   },
   "home": {
-    "tagline": "God loves diversity",
-    "subtitle": "No reading is final. Faith is conjugated in the plural.",
-    "cta_participate": "Participate",
-    "cta_understand": "Understand",
-    "cta_gallery": "See the photos",
-    "manifesto_title": "The message",
-    "manifesto_text": "God is not opposed to LGBT people. This rejection is the product of historical and human interpretations of sacred texts.",
-    "pillars_title": "Four simple truths",
-    "pillar1_title": "God is universal love",
-    "pillar1_text": "The great monotheistic religions are based on love, compassion and justice. No explicit condemnation of homosexuality was made by Jesus, who preached inclusion.",
-    "pillar2_title": "Texts are contextual",
-    "pillar2_text": "Passages used against LGBT people must be understood in their historical context: rituals, social norms, ancient codes.",
-    "pillar3_title": "Interpretation is human",
-    "pillar3_text": "Religious readings have been influenced by cultural norms: patriarchy, heterocentrism, power.",
-    "pillar4_title": "Faith and diversity are compatible",
-    "pillar4_text": "Many inclusive religious communities exist today across the world.",
-    "join_title": "Join the movement",
-    "join_text": "Download the poster, take a photo with it in front of a place of worship, and share with #GodLovesDiversity."
+    "heroEyebrow": "Gay sauna · Paris 3",
+    "heroTitle": "Paris' largest 100% men sauna",
+    "heroBody": "Sauna, steam bath, pool, jacuzzi, sports hall, cruising area — 3000 sqm on 3 floors, open 7/7.",
+    "heroCtaAgenda": "See events",
+    "heroCtaTariffs": "Pricing & access",
+    "openingTitle": "Opening hours",
+    "openingNote": "Open 7/7 from 12pm to 2am. Closing at 6am Friday, Saturday and eves of public holidays.",
+    "placesTitle": "5 zones, one experience",
+    "agendaTitle": "This week",
+    "agendaCta": "See full agenda",
+    "newsletterTitle": "Newsletter",
+    "newsletterBody": "Receive nights, schedules and offers in advance."
+  },
+  "agenda": {
+    "title": "Events",
+    "intro": "Recurring nights and upcoming events at Sun City.",
+    "weekly": "Weekly nights",
+    "upcoming": "Upcoming events",
+    "noEvents": "No upcoming events at the moment.",
+    "from": "From",
+    "hostedBy": "Hosted by",
+    "moreInfo": "More info",
+    "icalExport": "Export (iCal)"
+  },
+  "days": {
+    "MONDAY": "Monday",
+    "TUESDAY": "Tuesday",
+    "WEDNESDAY": "Wednesday",
+    "THURSDAY": "Thursday",
+    "FRIDAY": "Friday",
+    "SATURDAY": "Saturday",
+    "SUNDAY": "Sunday"
+  },
+  "weekOfMonth": {
+    "ALL": "Every week",
+    "ODD": "1st & 3rd {day} of the month",
+    "EVEN": "2nd & 4th {day} of the month",
+    "W1": "1st {day} of the month",
+    "W2": "2nd {day} of the month",
+    "W3": "3rd {day} of the month",
+    "W4": "4th {day} of the month",
+    "W5": "5th {day} of the month"
+  },
+  "places": {
+    "title": "Our spaces",
+    "intro": "5 zones for relaxation, sport and cruising.",
+    "discover": "Discover"
+  },
+  "tariffs": {
+    "title": "Pricing",
+    "intro": "Entry includes 2 drinks, 2 towels and condoms.",
+    "weekday": "Weekday",
+    "weekend": "Weekend",
+    "u26": "Under 26",
+    "after3": "After 3am",
+    "specialMon": "Monday",
+    "specialTue": "Tuesday",
+    "extraTowel": "Extra towel: €1",
+    "freePass": "For the « Free Pass », sign up on sexygroup.fr"
+  },
+  "schedule": {
+    "title": "Hours & access",
+    "openingTitle": "Opening hours",
+    "accessTitle": "Access",
+    "metro": "Metro Étienne Marcel (line 4) or Réaumur-Sébastopol (lines 3, 4)",
+    "bus": "Bus 38, 47",
+    "parking": "Nearby SAEMES Sébastopol car park",
+    "phone": "Phone: {phone}"
+  },
+  "newsletterPage": {
+    "title": "Newsletter",
+    "body": "Nights, schedules, offers — max one email per week. Unsubscribe in 1 click.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Sign me up",
+    "consent": "By clicking, you agree to receive our newsletter (GDPR: see our privacy policy).",
+    "successTitle": "Check your inbox",
+    "successBody": "We just sent you a confirmation link. Click it to validate your signup.",
+    "errorGeneric": "An error occurred. Try again in a moment."
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "A question or remark? We get back to you.",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "subjectLabel": "Subject",
+    "messageLabel": "Message",
+    "submit": "Send",
+    "successTitle": "Message sent",
+    "successBody": "We will get back to you shortly.",
+    "errorGeneric": "An error occurred. Try again in a moment.",
+    "directContact": "Direct contact"
   },
   "footer": {
-    "tagline": "God is love. Faith is plural.",
-    "rights": "All rights reserved",
-    "legal": "Legal",
-    "privacy": "Privacy",
-    "contact": "Contact"
+    "openingHours": "Open 7/7 — 12pm to 2am (6am Fri/Sat/holiday eves)",
+    "rcs": "Site edited by SARL GYM SEBASTOPOL · RCS Paris 45274626600025",
+    "partnersTitle": "Partners",
+    "sisterTitle": "Our sister venue",
+    "infoTitle": "Info",
+    "socialTitle": "Follow us"
   },
-  "participate": {
-    "title": "Share your light",
-    "subtitle": "Take a photo of yourself in front of a place of worship with the poster, and join the global movement.",
-    "drop_label": "Drop your photo here or click to browse",
-    "name_label": "Your first name (optional)",
-    "place_label": "Place name",
-    "place_type_label": "Place type",
-    "city_label": "City",
-    "country_label": "Country",
-    "caption_label": "Short statement (optional)",
-    "submit": "Send my photo",
-    "submitting": "Sending…",
-    "success_title": "Thank you!",
-    "success_text": "Your photo has been sent. It will be published after a quick review.",
-    "error": "An error occurred. Please try again."
-  },
-  "gallery": {
-    "title": "Global gallery",
-    "subtitle": "Every photo is a testimony. Every testimony is a step.",
-    "filter_all": "All",
-    "filter_country": "Country",
-    "filter_place": "Place",
-    "empty": "No photo for these filters yet."
-  },
-  "posters": {
-    "title": "Download the posters",
-    "subtitle": "Print. Stick. Photograph. Share.",
-    "format": "Format",
-    "download": "Download",
-    "tip_title": "Tips",
-    "tip1": "Place the poster in public space or hold it in front of a place of worship.",
-    "tip2": "Take a photo and share it with #GodLovesDiversity.",
-    "tip3": "Upload it here directly to join the global gallery."
-  },
-  "newsletter": {
-    "title": "Get the movement's news",
-    "subtitle": "Once a month: stories, meetings, inspirations.",
-    "email_label": "Your email",
-    "subscribe": "Subscribe",
-    "success": "Check your inbox to confirm your subscription.",
-    "error": "Error, please try again later."
-  },
-  "about": {
-    "title": "About",
-    "intro": "Sun City Paris is a citizen, interfaith, international movement to reconcile faith and diversity."
-  },
-  "message": { "title": "The message" },
-  "argumentaire": { "title": "Argument" },
-  "common": { "loading": "Loading…", "error": "Error", "back": "Back" }
+  "common": {
+    "readMore": "Read more",
+    "comingSoon": "Coming soon",
+    "loading": "Loading…",
+    "languageFr": "Français",
+    "languageEn": "English"
+  }
 }

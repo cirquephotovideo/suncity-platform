@@ -1,10 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
-export default function NewsletterForm() {
-  const t = useTranslations('newsletterPage');
-  const locale = useLocale();
+export default function ContactForm() {
+  const t = useTranslations('contact');
   const [state, setState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -12,10 +11,10 @@ export default function NewsletterForm() {
     setState('sending');
     const fd = new FormData(e.currentTarget);
     try {
-      const res = await fetch('/api/newsletter/subscribe', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: fd.get('email'), locale }),
+        body: JSON.stringify(Object.fromEntries(fd as any)),
       });
       if (!res.ok) throw new Error('failed');
       setState('success');
@@ -37,11 +36,21 @@ export default function NewsletterForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm mb-1" htmlFor="email">{t('emailLabel')}</label>
-        <input id="email" name="email" type="email" required placeholder={t('emailPlaceholder')}
-          className="w-full bg-bgAlt border border-border rounded-md px-3 py-2 focus:border-primary outline-none" />
+        <label className="block text-sm mb-1" htmlFor="name">{t('nameLabel')}</label>
+        <input id="name" name="name" required className="w-full bg-bgAlt border border-border rounded-md px-3 py-2 focus:border-primary outline-none" />
       </div>
-      <p className="text-xs text-textMuted">{t('consent')}</p>
+      <div>
+        <label className="block text-sm mb-1" htmlFor="email">{t('emailLabel')}</label>
+        <input id="email" name="email" type="email" required className="w-full bg-bgAlt border border-border rounded-md px-3 py-2 focus:border-primary outline-none" />
+      </div>
+      <div>
+        <label className="block text-sm mb-1" htmlFor="subject">{t('subjectLabel')}</label>
+        <input id="subject" name="subject" className="w-full bg-bgAlt border border-border rounded-md px-3 py-2 focus:border-primary outline-none" />
+      </div>
+      <div>
+        <label className="block text-sm mb-1" htmlFor="body">{t('messageLabel')}</label>
+        <textarea id="body" name="body" required rows={6} className="w-full bg-bgAlt border border-border rounded-md px-3 py-2 focus:border-primary outline-none resize-y"></textarea>
+      </div>
       {state === 'error' && <p className="text-danger text-sm">{t('errorGeneric')}</p>}
       <button type="submit" disabled={state === 'sending'} className="btn-primary disabled:opacity-50">
         {t('submit')}

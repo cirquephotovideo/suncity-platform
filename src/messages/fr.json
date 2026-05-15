@@ -1,97 +1,140 @@
 {
+  "site": {
+    "name": "Sun City Paris",
+    "tagline": "Le plus grand sauna gay de Paris — 3000 m² sur 3 étages",
+    "phone": "01 40 09 26 09",
+    "address": "62 boulevard de Sébastopol, 75003 Paris",
+    "addressShort": "62 bd Sébastopol, Paris 3"
+  },
   "nav": {
     "home": "Accueil",
-    "message": "Le message",
-    "argumentaire": "Argumentaire",
-    "participate": "Participer",
-    "gallery": "Galerie",
-    "posters": "Affiches",
-    "about": "À propos",
+    "agenda": "Agenda",
+    "places": "Lieux",
+    "tariffs": "Tarifs",
+    "schedule": "Horaires & accès",
+    "rules": "Règlement",
+    "checkin": "Check-in",
+    "contact": "Contact",
     "newsletter": "Newsletter",
-    "blog": "Blog"
+    "blog": "Blog",
+    "gallery": "Galerie",
+    "partners": "Partenaires",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité"
+  },
+  "ageGate": {
+    "title": "Avant d'entrer",
+    "body": "Ce site est strictement réservé aux personnes majeures (+18 ans) et présente du contenu adulte.",
+    "confirm": "J'ai 18 ans ou plus — entrer",
+    "leave": "Quitter le site"
   },
   "home": {
-    "tagline": "Dieu aime la diversité",
-    "subtitle": "Aucune lecture n'est définitive. La foi se conjugue au pluriel.",
-    "cta_participate": "Participer",
-    "cta_understand": "Comprendre",
-    "cta_gallery": "Voir les photos",
-    "manifesto_title": "Le message",
-    "manifesto_text": "Dieu n'est pas opposé aux personnes LGBT. Ce rejet est le produit d'interprétations historiques et humaines des textes sacrés.",
-    "pillars_title": "Quatre vérités simples",
-    "pillar1_title": "Dieu est amour universel",
-    "pillar1_text": "Les grandes religions monothéistes reposent sur l'amour, la compassion et la justice. Aucune condamnation explicite de l'homosexualité n'est formulée par Jésus, qui prône l'inclusion.",
-    "pillar2_title": "Les textes sont contextualisés",
-    "pillar2_text": "Les passages utilisés contre les personnes LGBT doivent être compris dans leur contexte historique : rites, normes sociales, codes anciens.",
-    "pillar3_title": "L'interprétation est humaine",
-    "pillar3_text": "Les lectures religieuses ont été influencées par des normes culturelles : patriarcat, hétérocentrisme, pouvoir.",
-    "pillar4_title": "Foi et diversité sont compatibles",
-    "pillar4_text": "De nombreuses communautés religieuses inclusives existent aujourd'hui partout dans le monde.",
-    "join_title": "Rejoignez le mouvement",
-    "join_text": "Téléchargez l'affiche, prenez-la en photo devant un lieu de culte, et partagez sous #GodLovesDiversity."
+    "heroEyebrow": "Sauna gay · Paris 3",
+    "heroTitle": "Le plus grand sauna 100% hommes de Paris",
+    "heroBody": "Sauna, hammam, piscine, jacuzzi, salle de sport, espace drague — 3000 m² sur 3 étages, ouvert 7/7.",
+    "heroCtaAgenda": "Voir l'agenda",
+    "heroCtaTariffs": "Tarifs & accès",
+    "openingTitle": "Horaires d'ouverture",
+    "openingNote": "Ouvert 7/7 de 12h à 2h. Fermeture à 6h le vendredi, le samedi et la veille des jours fériés.",
+    "placesTitle": "5 zones, une expérience",
+    "agendaTitle": "L'agenda de la semaine",
+    "agendaCta": "Voir tout l'agenda",
+    "newsletterTitle": "Newsletter",
+    "newsletterBody": "Pour recevoir les soirées, agendas et offres en avant-première."
+  },
+  "agenda": {
+    "title": "Agenda",
+    "intro": "Soirées récurrentes et événements à venir au Sun City.",
+    "weekly": "Soirées hebdomadaires",
+    "upcoming": "Événements à venir",
+    "noEvents": "Aucun événement prévu pour le moment.",
+    "from": "Dès",
+    "hostedBy": "Hébergé par",
+    "moreInfo": "Plus d'infos",
+    "icalExport": "Exporter (iCal)"
+  },
+  "days": {
+    "MONDAY": "Lundi",
+    "TUESDAY": "Mardi",
+    "WEDNESDAY": "Mercredi",
+    "THURSDAY": "Jeudi",
+    "FRIDAY": "Vendredi",
+    "SATURDAY": "Samedi",
+    "SUNDAY": "Dimanche"
+  },
+  "weekOfMonth": {
+    "ALL": "Toutes les semaines",
+    "ODD": "1ᵉʳ et 3ᵉ {day} du mois",
+    "EVEN": "2ᵉ et 4ᵉ {day} du mois",
+    "W1": "1ᵉʳ {day} du mois",
+    "W2": "2ᵉ {day} du mois",
+    "W3": "3ᵉ {day} du mois",
+    "W4": "4ᵉ {day} du mois",
+    "W5": "5ᵉ {day} du mois"
+  },
+  "places": {
+    "title": "Nos espaces",
+    "intro": "5 zones pensées pour la détente, le sport et la drague.",
+    "discover": "Découvrir"
+  },
+  "tariffs": {
+    "title": "Tarifs",
+    "intro": "Entrée incluant 2 boissons, 2 serviettes et préservatifs.",
+    "weekday": "Semaine",
+    "weekend": "Week-end",
+    "u26": "−26 ans",
+    "after3": "Après 3h",
+    "specialMon": "Lundi",
+    "specialTue": "Mardi",
+    "extraTowel": "Serviette supplémentaire : 1 €",
+    "freePass": "Pour le « Free Pass », inscription sur sexygroup.fr"
+  },
+  "schedule": {
+    "title": "Horaires & accès",
+    "openingTitle": "Horaires",
+    "accessTitle": "Accès",
+    "metro": "Métro Étienne Marcel (ligne 4) ou Réaumur-Sébastopol (lignes 3, 4)",
+    "bus": "Bus 38, 47",
+    "parking": "Parking SAEMES Sébastopol à proximité",
+    "phone": "Téléphone : {phone}"
+  },
+  "newsletterPage": {
+    "title": "Newsletter",
+    "body": "Soirées, agendas, offres — un email max par semaine. Désinscription en 1 clic.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "vous@exemple.com",
+    "submit": "M'inscrire",
+    "consent": "En cliquant, vous acceptez de recevoir notre newsletter (RGPD : voir notre politique de confidentialité).",
+    "successTitle": "Vérifiez vos emails",
+    "successBody": "Nous venons de vous envoyer un lien de confirmation. Cliquez dessus pour valider votre inscription.",
+    "errorGeneric": "Une erreur est survenue. Réessayez dans un instant."
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Une question, une remarque ? On vous répond.",
+    "nameLabel": "Nom",
+    "emailLabel": "Email",
+    "subjectLabel": "Sujet",
+    "messageLabel": "Message",
+    "submit": "Envoyer",
+    "successTitle": "Message envoyé",
+    "successBody": "Nous revenons vers vous au plus vite.",
+    "errorGeneric": "Une erreur est survenue. Réessayez dans un instant.",
+    "directContact": "Contact direct"
   },
   "footer": {
-    "tagline": "Dieu est amour. La foi se conjugue au pluriel.",
-    "rights": "Tous droits réservés",
-    "legal": "Mentions légales",
-    "privacy": "Confidentialité",
-    "contact": "Contact"
-  },
-  "participate": {
-    "title": "Partagez votre lumière",
-    "subtitle": "Photographiez-vous devant un lieu de culte avec l'affiche, et rejoignez le mouvement mondial.",
-    "drop_label": "Glissez votre photo ici ou cliquez pour parcourir",
-    "name_label": "Votre prénom (optionnel)",
-    "place_label": "Nom du lieu",
-    "place_type_label": "Type de lieu",
-    "city_label": "Ville",
-    "country_label": "Pays",
-    "caption_label": "Témoignage court (optionnel)",
-    "submit": "Envoyer ma photo",
-    "submitting": "Envoi…",
-    "success_title": "Merci !",
-    "success_text": "Votre photo a été envoyée. Elle sera publiée après une rapide modération.",
-    "error": "Une erreur est survenue. Réessayez."
-  },
-  "gallery": {
-    "title": "Galerie mondiale",
-    "subtitle": "Chaque photo est un témoignage. Chaque témoignage est un pas.",
-    "filter_all": "Tous",
-    "filter_country": "Pays",
-    "filter_place": "Lieu",
-    "empty": "Aucune photo pour ces filtres pour le moment."
-  },
-  "posters": {
-    "title": "Téléchargez les affiches",
-    "subtitle": "Imprimez. Posez. Photographiez. Partagez.",
-    "format": "Format",
-    "download": "Télécharger",
-    "tip_title": "Conseils",
-    "tip1": "Posez l'affiche dans l'espace public ou tenez-la devant un lieu de culte.",
-    "tip2": "Prenez la photo et partagez-la avec #GodLovesDiversity.",
-    "tip3": "Importez-la directement ici pour rejoindre la galerie mondiale."
-  },
-  "newsletter": {
-    "title": "Recevez l'actualité du mouvement",
-    "subtitle": "Une fois par mois, des témoignages, des rendez-vous, des inspirations.",
-    "email_label": "Votre email",
-    "subscribe": "S'abonner",
-    "success": "Vérifiez votre boîte mail pour confirmer votre inscription.",
-    "error": "Erreur, réessayez plus tard."
-  },
-  "about": {
-    "title": "À propos",
-    "intro": "Sun City Paris est un mouvement citoyen, interreligieux et international, pour réconcilier la foi et la diversité."
-  },
-  "message": {
-    "title": "Le message"
-  },
-  "argumentaire": {
-    "title": "Argumentaire"
+    "openingHours": "Ouvert 7/7 — 12h à 2h (6h ven/sam/veille de fériés)",
+    "rcs": "Site édité par SARL GYM SEBASTOPOL · RCS Paris 45274626600025",
+    "partnersTitle": "Partenaires",
+    "sisterTitle": "Notre établissement frère",
+    "infoTitle": "Infos",
+    "socialTitle": "Suivez-nous"
   },
   "common": {
+    "readMore": "Lire la suite",
+    "comingSoon": "Bientôt disponible",
     "loading": "Chargement…",
-    "error": "Erreur",
-    "back": "Retour"
+    "languageFr": "Français",
+    "languageEn": "English"
   }
 }

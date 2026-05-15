@@ -1,50 +1,42 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { prisma } from '@/lib/prisma';
-import { sendEmail, notifyAdmin } from '@/lib/email';
-import { rateLimit, rateLimitResponse } from '@/lib/rate-limit';
+import { sendMail } from '@/lib/mail';
 
 const Body = z.object({
-  email: z.string().email(),
-  locale: z.string().default('fr')
+  email: z.string().email().toLowerCase(),
+  locale: z.enum(['fr', 'en']).default('fr'),
 });
 
-export async function POST(req: Request) {
-  // Anti-spam : max 3 inscriptions / IP / heure
-  const rl = rateLimit(req, { key: 'newsletter', max: 3, windowMs: 60 * 60_000 });
-  if (!rl.ok) return rateLimitResponse(rl.resetAt);
-
-  const json = await req.json().catch(() => ({}));
+export async function POST(req: NextRequest) {
+  const json = await req.json().catch(() => null);
   const parsed = Body.safeParse(json);
   if (!parsed.success) return NextResponse.json({ error: 'invalid' }, { status: 400 });
 
   const { email, locale } = parsed.data;
   const confirmToken = crypto.randomBytes(24).toString('hex');
+  const unsubscribeToken = crypto.randomBytes(24).toString('hex');
+
+  const existing = await prisma.newsletterSubscriber.findUnique({ where: { email } });
+  if (existing && existing.status === 'CONFIRMED') {
+    return NextResponse.json({ ok: true, alreadyConfirmed: true });
+  }
 
   const sub = await prisma.newsletterSubscriber.upsert({
     where: { email },
-    update: { locale, confirmToken, status: 'PENDING' },
-    create: { email, locale, confirmToken, status: 'PENDING' }
+    update: { status: 'PENDING', confirmToken, unsubscribeToken, locale },
+    create: { email, locale, status: 'PENDING', confirmToken, unsubscribeToken },
   });
 
-  const confirmUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/confirm?token=${confirmToken}`;
+  const base = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const link = `${base}/${locale}/api/newsletter/confirm/${sub.confirmToken}`;
+  const subject = locale === 'fr' ? 'Confirmez votre inscription — Sun City Paris' : 'Confirm your signup — Sun City Paris';
+  const html = locale === 'fr'
+    ? `<p>Bonjour,</p><p>Cliquez sur le lien suivant pour confirmer votre inscription à la newsletter Sun City Paris :</p><p><a href="${link}">${link}</a></p><p>Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>`
+    : `<p>Hi,</p><p>Click the link below to confirm your signup to the Sun City Paris newsletter:</p><p><a href="${link}">${link}</a></p><p>If you didn't request this, ignore this email.</p>`;
 
-  await sendEmail(
-    email,
-    'Confirmez votre inscription — Sun City Paris',
-    `<div style="font-family:sans-serif;max-width:520px;margin:auto;padding:24px;background:#0a0a0a;color:#fff;border-radius:12px">
-      <h1 style="color:#FF1493">Bienvenue 🌈</h1>
-      <p>Pour recevoir la newsletter, confirme ton email :</p>
-      <p><a href="${confirmUrl}" style="display:inline-block;background:#FF1493;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">Confirmer mon email</a></p>
-      <p style="color:#888;font-size:12px">Tu peux te désinscrire en un clic à tout moment.</p>
-    </div>`
-  ).catch(() => {});
+  try { await sendMail({ to: email, subject, html }); } catch (e) { console.error('newsletter mail failed', e); }
 
-  notifyAdmin(
-    'Nouvelle inscription newsletter',
-    `<p>Nouveau pré-abonné : <strong>${email}</strong> (${locale})</p>`
-  ).catch(() => {});
-
-  return NextResponse.json({ ok: true, id: sub.id });
+  return NextResponse.json({ ok: true });
 }

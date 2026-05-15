@@ -1,19 +1,21 @@
-import { setRequestLocale } from 'next-intl/server';
-import { NewsletterForm } from '@/components/NewsletterForm';
-import { useTranslations } from 'next-intl';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import NewsletterForm from '@/components/NewsletterForm';
 
-export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  setRequestLocale(locale);
-  return <View />;
+  const t = await getTranslations({ locale, namespace: 'newsletterPage' });
+  return { title: `${t('title')} — Sun City Paris`, description: t('body') };
 }
 
-function View() {
-  const t = useTranslations('newsletter');
+export default async function NewsletterPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('newsletterPage');
   return (
-    <section className="container-tight py-20">
-      <h1 className="font-display text-5xl font-black gradient-text">{t('title')}</h1>
-      <p className="text-white/70 mt-4 mb-10">{t('subtitle')}</p>
+    <section className="section max-w-xl">
+      <p className="eyebrow mb-3">Sun City</p>
+      <h1 className="font-display text-4xl md:text-5xl mb-4">{t('title')}</h1>
+      <p className="text-textMuted mb-8">{t('body')}</p>
       <NewsletterForm />
     </section>
   );
