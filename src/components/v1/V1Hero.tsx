@@ -1,7 +1,8 @@
 import { Link } from '@/i18n/routing';
 import { V1, AcidText, GrainOverlay, Sticker, V1Pill } from './V1Atoms';
+import { V1HeroEvents, type HeroEventItem } from './V1HeroEvents';
 
-export function V1Hero() {
+export function V1Hero({ events = [] }: { events?: HeroEventItem[] } = {}) {
   return (
     <section
       style={{
@@ -126,6 +127,9 @@ export function V1Hero() {
           </Link>
         </div>
       </div>
+
+      {/* Ticker événements (côté droit) */}
+      <V1HeroEvents items={events} />
 
       {/* Numéro déco vertical */}
       <div
