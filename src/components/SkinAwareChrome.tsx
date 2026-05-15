@@ -31,7 +31,6 @@ export async function SkinAwareChrome({ children, locale }: { children: ReactNod
         <a href="#main" className="skip-link">Skip to content</a>
         <Header />
         <main id="main">{children}</main>
-        {/* @ts-expect-error async server */}
         <Footer />
         <AgeGate />
         <AskSunCityWidget />
@@ -45,7 +44,6 @@ export async function SkinAwareChrome({ children, locale }: { children: ReactNod
       <div style={{ minHeight: '100vh', background: skin.bg, color: skin.fg }}>
         <V1Nav />
         <main>{children}</main>
-        {/* @ts-expect-error async server */}
         <V1Footer />
         <AgeGate />
       </div>
@@ -75,7 +73,6 @@ export async function SkinAwareChrome({ children, locale }: { children: ReactNod
       }}>
         <V3Nav />
         <main>{children}</main>
-        {/* @ts-expect-error async server */}
         <V3Footer />
         <AgeGate />
       </div>

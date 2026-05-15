@@ -26,7 +26,6 @@ export default async function BilletteriePage({ params }: { params: Promise<{ lo
 
   return (
     <section className="section">
-      {/* @ts-expect-error async server */}
       <PageHero eyebrow="Sun City" title={locale === 'fr' ? 'Billetterie en ligne' : 'Online tickets'} subtitle={locale === 'fr' ? 'Achète ton entrée en quelques clics. Reçois ton QR code par email.' : 'Buy your entry in clicks. Get your QR code by email.'} />
 
       {!stripeReady && (

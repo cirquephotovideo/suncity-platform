@@ -22,7 +22,6 @@ export default async function TariffsPage({ params }: { params: Promise<{ locale
 
   return (
     <section className="section">
-      {/* @ts-expect-error async server */}
       <PageHero eyebrow="Sun City" title={t('title')} subtitle={t('intro')} />
 
       <div className="overflow-x-auto rounded-lg border border-border">

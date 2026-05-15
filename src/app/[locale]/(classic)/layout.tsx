@@ -9,7 +9,6 @@ export default async function ClassicLayout({ children, params }: { children: Re
   const { locale } = await params;
   return (
     <>
-      {/* @ts-expect-error async server component */}
       <SkinAwareChrome locale={locale}>
         {children}
       </SkinAwareChrome>

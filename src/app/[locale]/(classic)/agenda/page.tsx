@@ -30,7 +30,6 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
 
   return (
     <>
-      {/* @ts-expect-error async server */}
       <PageHero eyebrow="Sun City" title={t('title')} subtitle={t('intro')} />
 
       <section className="section pt-0">

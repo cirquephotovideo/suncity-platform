@@ -19,7 +19,6 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
   return (
     <section className="section">
-      {/* @ts-expect-error async server */}
       <PageHero eyebrow="Sun City" title={t('title')} subtitle={t('intro')} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

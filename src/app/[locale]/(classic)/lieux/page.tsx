@@ -22,7 +22,6 @@ export default async function LocationsPage({ params }: { params: Promise<{ loca
 
   return (
     <>
-      {/* @ts-expect-error async server */}
       <PageHero eyebrow="Sun City" title={t('title')} subtitle={t('intro')} />
 
       <section className="section pt-0">

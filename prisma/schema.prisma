@@ -139,6 +139,8 @@ model User {
   approvedPhotos Photo[]          @relation("PhotoApprover")
   scheduledPosts ScheduledPost[]
   contactReplies ContactMessage[] @relation("ContactRepliedBy")
+  assignedTasks  Task[]           @relation("TaskAssignee")
+  createdTasks   Task[]           @relation("TaskCreator")
 }
 
 model Account {
@@ -830,3 +832,123 @@ model PageBlock {
 
   @@index([pageId, orderIdx])
 }
+
+// ─────────────────────────────────────────────────────────
+// P9 — IA & RAG additions
+// Append this block to the end of prisma/schema.prisma
+// then run: npx prisma format && npx prisma validate
+// ─────────────────────────────────────────────────────────
+
+enum AiProvider {
+  GEMINI
+  OPENAI
+  ANTHROPIC
+}
+
+enum KnowledgeStatus {
+  DRAFT
+  INDEXED
+  ARCHIVED
+}
+
+enum KnowledgeSource {
+  MANUAL
+  WEB
+  SCHEMA
+}
+
+model AiSetting {
+  id               Int        @id @default(1)
+  defaultProvider  AiProvider @default(GEMINI)
+  geminiModel      String     @default("gemini-1.5-flash")
+  openaiModel      String     @default("gpt-4o-mini")
+  anthropicModel   String     @default("claude-3-haiku-20240307")
+  dailyBudgetCents Int        @default(500)
+  updatedAt        DateTime   @updatedAt
+}
+
+model KnowledgeDoc {
+  id        String          @id @default(cuid())
+  slug      String          @unique
+  title     String
+  source    KnowledgeSource @default(MANUAL)
+  sourceUrl String?
+  content   String          @db.Text
+  status    KnowledgeStatus @default(DRAFT)
+  locale    Locale          @default(fr)
+  indexedAt DateTime?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  chunks KnowledgeChunk[]
+
+  @@index([status, locale])
+}
+
+model KnowledgeChunk {
+  id        String   @id @default(cuid())
+  docId     String
+  orderIdx  Int
+  text      String   @db.Text
+  embedding String?  @db.Text
+  tokens    Int?
+  createdAt DateTime @default(now())
+
+  doc KnowledgeDoc @relation(fields: [docId], references: [id], onDelete: Cascade)
+
+  @@index([docId, orderIdx])
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+  ARCHIVED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Task {
+  id            String       @id @default(cuid())
+  title         String
+  descriptionMd String?      @db.Text
+  status        TaskStatus   @default(TODO)
+  priority      TaskPriority @default(MEDIUM)
+  dueAt         DateTime?
+  assignedToId  String?
+  createdById   String
+
+  assignedTo User? @relation("TaskAssignee", fields: [assignedToId], references: [id])
+  createdBy  User  @relation("TaskCreator", fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdminSecret {
+  id          String    @id @default(cuid())
+  key         String    @unique
+  value       String    @db.Text
+  description String?
+  lastUsedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// ==========================================================================
+// INSTRUCTIONS MANUELLES — modèle User
+// ==========================================================================
+// Ajoutez ces deux lignes dans le bloc model User { ... } :
+//
+//   assignedTasks Task[] @relation("TaskAssignee")
+//   createdTasks  Task[] @relation("TaskCreator")
+//
+// Le modèle UserMfa EXISTS déjà — NE PAS recréer.
+// La relation `mfa UserMfa?` EXISTS déjà dans User — NE PAS toucher.
+// ==========================================================================
