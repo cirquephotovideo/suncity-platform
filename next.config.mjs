@@ -28,16 +28,16 @@ const securityHeaders = [
     key: 'Content-Security-Policy-Report-Only',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://js.stripe.com https://www.youtube.com",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "media-src 'self' blob:",
       "font-src 'self' data:",
-      "connect-src 'self' https://generativelanguage.googleapis.com https://nominatim.openstreetmap.org",
-      "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
+      "connect-src 'self' https://generativelanguage.googleapis.com https://api.stripe.com https://nominatim.openstreetmap.org",
+      "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://js.stripe.com",
       "object-src 'none'",
       "base-uri 'self'",
-      "form-action 'self'"
+      "form-action 'self' https://checkout.stripe.com"
     ].join('; ')
   }
 ];
