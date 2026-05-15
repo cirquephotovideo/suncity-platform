@@ -1,3 +1,4 @@
+'use client';
 import { useTranslations } from 'next-intl';
 
 type Day = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';

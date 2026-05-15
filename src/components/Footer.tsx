@@ -1,5 +1,5 @@
 import { Link } from '@/i18n/routing';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { Facebook, Instagram, Twitter } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 
@@ -9,9 +9,9 @@ async function getSettings() {
 }
 
 export default async function Footer() {
-  const t = useTranslations('footer');
-  const tNav = useTranslations('nav');
-  const tSite = useTranslations('site');
+  const t = await getTranslations('footer');
+  const tNav = await getTranslations('nav');
+  const tSite = await getTranslations('site');
   const settings = await getSettings();
   const social = (settings?.socialJson as any) || {};
 
