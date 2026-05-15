@@ -601,16 +601,24 @@ model Theme {
 }
 
 model Banner {
-  id        String    @id @default(cuid())
-  slug      String    @unique
-  position  String
-  active    Boolean   @default(true)
-  startsAt  DateTime?
-  endsAt    DateTime?
-  ctaUrl    String?
-  imageUrl  String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  position    String
+  active      Boolean   @default(true)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  ctaUrl      String?
+  imageUrl    String?
+  eyebrow     String?
+  videoUrl    String?
+  accentColor String?
+  themeSlug   String?
+  ctaUrl2     String?
+  ctaLabel2   String?
+  aiPrompt    String?   @db.Text
+  presetSlug  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   translations BannerTranslation[]
 }

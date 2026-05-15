@@ -1,10 +1,13 @@
-import { redirect } from 'next/navigation';
-import { requireAdmin } from '@/lib/admin-auth';
-import { upsertBanner } from '../actions';
-import BannerForm from '@/components/admin/BannerForm';
+'use client';
+import { useRouter } from 'next/navigation';
+import { BannerEditor } from '@/components/admin/BannerEditor';
 
-export default async function NewBanner() {
-  await requireAdmin();
-  async function action(fd: FormData) { 'use server'; const id = await upsertBanner(null, fd); redirect(`/admin/banners/${id}`); }
-  return <div><h1 className="font-display text-3xl mb-6">Nouvelle bannière</h1><BannerForm action={action} /></div>;
+export default function NewBannerPage() {
+  const router = useRouter();
+  return (
+    <BannerEditor
+      onClose={() => router.push('/admin/banners')}
+      onSaved={(b) => router.push(`/admin/banners/${b.id}/edit`)}
+    />
+  );
 }
