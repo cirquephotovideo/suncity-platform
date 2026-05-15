@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation';
 import { requireAdmin } from '@/lib/admin-auth';
 
-export default async function ProductRedirect({ params }: { params: Promise<{ id: string }> }) {
+export default async function NewsRedirect({ params }: { params: Promise<{ id: string }> }) {
   await requireAdmin();
   const { id } = await params;
-  redirect(`/admin/products/${id}/edit`);
+  redirect(`/admin/news/${id}/edit`);
 }

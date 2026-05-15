@@ -1,10 +1,13 @@
-import { redirect } from 'next/navigation';
-import { requireAdmin } from '@/lib/admin-auth';
-import { upsertProduct } from '../actions';
-import ProductForm from '@/components/admin/ProductForm';
+'use client';
+import { useRouter } from 'next/navigation';
+import { ProductsAdmin } from '@/components/admin/ProductsAdmin';
 
-export default async function NewProduct() {
-  await requireAdmin();
-  async function action(fd: FormData) { 'use server'; const id = await upsertProduct(null, fd); redirect(`/admin/products/${id}`); }
-  return <div><h1 className="font-display text-3xl mb-6">Nouveau produit</h1><ProductForm action={action} /></div>;
+export default function NewProductPage() {
+  const router = useRouter();
+  return (
+    <ProductsAdmin
+      onClose={() => router.push('/admin/products')}
+      onSaved={p => router.push(p?.id ? `/admin/products/${p.id}/edit` : '/admin/products')}
+    />
+  );
 }
