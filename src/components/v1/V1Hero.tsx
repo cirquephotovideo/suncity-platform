@@ -2,7 +2,53 @@ import { Link } from '@/i18n/routing';
 import { V1, AcidText, GrainOverlay, Sticker, V1Pill } from './V1Atoms';
 import { V1HeroEvents, type HeroEventItem } from './V1HeroEvents';
 
-export function V1Hero({ events = [] }: { events?: HeroEventItem[] } = {}) {
+export type HeroBanner = {
+  title: string;          // ex "SUN CITY PARIS" or "BOLLYWOOD PARTY"
+  eyebrow?: string | null;
+  imageUrl?: string | null;
+  videoUrl?: string | null;
+  ctaUrl?: string | null;
+  ctaLabel?: string | null;
+  ctaUrl2?: string | null;
+  ctaLabel2?: string | null;
+  accentColor?: string | null;
+};
+
+const COLORS = [V1.yellow, V1.white, V1.red, V1.cream];
+
+/**
+ * Splits a title into up to 3 stylable lines for the giant Acid typography.
+ * "SUN CITY PARIS" → ["SUN", "CITY", "PARIS"]
+ * "BOLLYWOOD PARTY" → ["BOLLYWOOD", "PARTY"]
+ * "PRIDE" → ["PRIDE"]
+ */
+function splitTitleLines(title: string): string[] {
+  const cleaned = title.trim().toUpperCase().replace(/\s+/g, ' ');
+  const words = cleaned.split(' ').filter(Boolean);
+  if (words.length <= 3) return words;
+  // Group long titles into roughly-equal halves
+  const mid = Math.ceil(words.length / 2);
+  return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+}
+
+export function V1Hero({
+  events = [],
+  banner,
+}: {
+  events?: HeroEventItem[];
+  banner?: HeroBanner | null;
+} = {}) {
+  const lines = splitTitleLines(banner?.title || 'SUN CITY PARIS');
+  const eyebrow = banner?.eyebrow || '§ SAUNA GAY — PARIS 75003';
+  const ctaUrl = banner?.ctaUrl || '/billetterie';
+  const ctaLabel = banner?.ctaLabel || 'ENTRER 18+ →';
+  const ctaUrl2 = banner?.ctaUrl2 || '/agenda';
+  const ctaLabel2 = banner?.ctaLabel2 || "VOIR L'AGENDA";
+
+  // Pick a font size that fits — smaller for longer single-word lines
+  const longest = Math.max(...lines.map(l => l.length), 1);
+  const fontSize = longest <= 5 ? 220 : longest <= 8 ? 170 : longest <= 12 ? 130 : 100;
+
   return (
     <section
       style={{
@@ -17,6 +63,68 @@ export function V1Hero({ events = [] }: { events?: HeroEventItem[] } = {}) {
       }}
     >
       <GrainOverlay opacity={0.09} />
+
+      {/* MEDIA HERO (image ou vidéo de la bannière) */}
+      {banner?.videoUrl && (
+        <video
+          src={banner.videoUrl}
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '36%',
+            right: '24%',
+            bottom: 0,
+            width: '40%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 0.85,
+            zIndex: 1,
+            filter: 'contrast(1.05) saturate(1.1)',
+            mixBlendMode: 'screen',
+          }}
+        />
+      )}
+      {!banner?.videoUrl && banner?.imageUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={banner.imageUrl}
+          alt={banner.title}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '36%',
+            right: '24%',
+            bottom: 0,
+            width: '40%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 0.9,
+            zIndex: 1,
+            filter: 'contrast(1.05) saturate(1.1)',
+          }}
+        />
+      )}
+
+      {/* Vignette dégradé pour bien fondre l'image dans le noir */}
+      {(banner?.imageUrl || banner?.videoUrl) && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1,
+            background:
+              'linear-gradient(90deg, #000 0%, rgba(0,0,0,0.85) 32%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.85) 72%, #000 100%)',
+            pointerEvents: 'none',
+          }}
+        />
+      )}
 
       {/* Blocs déco background */}
       <div
@@ -46,20 +154,20 @@ export function V1Hero({ events = [] }: { events?: HeroEventItem[] } = {}) {
         }}
       />
 
-      {/* Stickers déco */}
-      <div style={{ position: 'absolute', top: 40, right: 80, zIndex: 2 }}>
+      {/* Stickers déco (haut-droit) */}
+      <div style={{ position: 'absolute', top: 40, right: 80, zIndex: 4 }}>
         <Sticker bg={V1.red} color={V1.white} rotate={3}>
           ● OPEN 7J/7
         </Sticker>
       </div>
-      <div style={{ position: 'absolute', top: 90, right: 200, zIndex: 2 }}>
+      <div style={{ position: 'absolute', top: 90, right: 200, zIndex: 4 }}>
         <Sticker bg={V1.black} color={V1.yellow} rotate={-2} style={{ border: `2px solid ${V1.yellow}` }}>
           ⊕ 75003 PARIS
         </Sticker>
       </div>
 
-      {/* Texte principal */}
-      <div style={{ position: 'relative', zIndex: 2 }}>
+      {/* Texte principal (gauche) */}
+      <div style={{ position: 'relative', zIndex: 2, maxWidth: '55%' }}>
         <div style={{ marginBottom: 8 }}>
           <span
             style={{
@@ -73,20 +181,22 @@ export function V1Hero({ events = [] }: { events?: HeroEventItem[] } = {}) {
               marginBottom: 12,
             }}
           >
-            § SAUNA GAY — PARIS 75003
+            {eyebrow}
           </span>
         </div>
 
         <div style={{ lineHeight: 0.82, marginBottom: 4 }}>
-          <AcidText size={220} color={V1.yellow} style={{ display: 'block' }}>
-            SUN
-          </AcidText>
-          <AcidText size={220} color={V1.white} skew={-2} style={{ display: 'block', marginTop: -12 }}>
-            CITY
-          </AcidText>
-          <AcidText size={220} color={V1.red} skew={-4} style={{ display: 'block', marginTop: -12 }}>
-            PARIS
-          </AcidText>
+          {lines.map((line, i) => (
+            <AcidText
+              key={i}
+              size={fontSize}
+              color={COLORS[i % COLORS.length]}
+              skew={i === 0 ? 0 : -2 - i * 1.5}
+              style={{ display: 'block', marginTop: i === 0 ? 0 : -12 }}
+            >
+              {line}
+            </AcidText>
+          ))}
         </div>
 
         <div
@@ -111,18 +221,18 @@ export function V1Hero({ events = [] }: { events?: HeroEventItem[] } = {}) {
         </div>
 
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 48 }}>
-          <Link href="/billetterie" style={{ textDecoration: 'none' }}>
-            <V1Pill bg={V1.yellow} color={V1.black}>
-              ENTRER 18+ →
+          <Link href={ctaUrl} style={{ textDecoration: 'none' }}>
+            <V1Pill bg={banner?.accentColor || V1.yellow} color={V1.black}>
+              {ctaLabel}
             </V1Pill>
           </Link>
-          <Link href="/agenda" style={{ textDecoration: 'none' }}>
+          <Link href={ctaUrl2} style={{ textDecoration: 'none' }}>
             <V1Pill
               bg="transparent"
               color={V1.yellow}
               style={{ border: `2px solid ${V1.yellow}`, boxShadow: `4px 4px 0 ${V1.yellow}44` }}
             >
-              VOIR L'AGENDA
+              {ctaLabel2}
             </V1Pill>
           </Link>
         </div>

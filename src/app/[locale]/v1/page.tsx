@@ -1,7 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import { prisma } from '@/lib/prisma';
 import { V1Nav }     from '@/components/v1/V1Nav';
-import { V1Hero }    from '@/components/v1/V1Hero';
+import { V1Hero, type HeroBanner } from '@/components/v1/V1Hero';
 import { V1Strip }   from '@/components/v1/V1Strip';
 import { V1Zones }   from '@/components/v1/V1Zones';
 import { V1Agenda }  from '@/components/v1/V1Agenda';
@@ -33,8 +33,7 @@ async function getHeroEvents(locale: string): Promise<HeroEventItem[]> {
       orderBy: { orderIndex: 'asc' },
       take: 8,
     });
-    // Sort by day-of-week (today first)
-    const todayIdx = (new Date().getDay() + 6) % 7; // 0=MON..6=SUN
+    const todayIdx = (new Date().getDay() + 6) % 7;
     const sorted = [...recs].sort((a, b) => {
       const ai = (DAY_ORDER.indexOf(a.dayOfWeek) - todayIdx + 7) % 7;
       const bi = (DAY_ORDER.indexOf(b.dayOfWeek) - todayIdx + 7) % 7;
@@ -53,15 +52,53 @@ async function getHeroEvents(locale: string): Promise<HeroEventItem[]> {
   }
 }
 
+async function getActiveHeroBanner(locale: string): Promise<HeroBanner | null> {
+  try {
+    const now = new Date();
+    const banners = await prisma.banner.findMany({
+      where: {
+        position: 'hero',
+        active: true,
+        AND: [
+          { OR: [{ startsAt: null }, { startsAt: { lte: now } }] },
+          { OR: [{ endsAt: null }, { endsAt: { gte: now } }] },
+        ],
+      },
+      include: { translations: { where: { locale: locale as 'fr' | 'en' } } },
+      orderBy: { updatedAt: 'desc' },
+      take: 1,
+    });
+    const b = banners[0];
+    if (!b) return null;
+    const tr = b.translations[0];
+    return {
+      title: tr?.title ?? b.slug,
+      eyebrow: b.eyebrow,
+      imageUrl: b.imageUrl,
+      videoUrl: b.videoUrl,
+      ctaUrl: b.ctaUrl,
+      ctaLabel: tr?.ctaLabel ?? null,
+      ctaUrl2: b.ctaUrl2,
+      ctaLabel2: b.ctaLabel2,
+      accentColor: b.accentColor,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default async function V1Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const heroEvents = await getHeroEvents(locale);
+  const [heroEvents, heroBanner] = await Promise.all([
+    getHeroEvents(locale),
+    getActiveHeroBanner(locale),
+  ]);
 
   return (
     <>
       <V1Nav />
-      <V1Hero events={heroEvents} />
+      <V1Hero events={heroEvents} banner={heroBanner} />
       <V1Strip />
       <V1Zones locale={locale} />
       <V1Agenda locale={locale} />
