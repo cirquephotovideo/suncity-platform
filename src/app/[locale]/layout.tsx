@@ -8,6 +8,7 @@ import { routing } from '@/i18n/routing';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AgeGate from '@/components/AgeGate';
+import { TopMarquee } from '@/components/HeroBanner';
 import { localBusinessJsonLd } from '@/lib/jsonld';
 import type { ReactNode } from 'react';
 
@@ -23,6 +24,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
+      <TopMarquee locale={locale} />
       <a href="#main" className="skip-link">Skip to content</a>
       <Header />
       <main id="main">{children}</main>

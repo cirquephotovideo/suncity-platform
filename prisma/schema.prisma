@@ -135,6 +135,9 @@ model User {
   ordersAdmin    Order[]          @relation("OrderAdmin")
   uploadedMedia  MediaAsset[]
   approvedMedia  MediaAsset[]     @relation("MediaApprovedBy")
+  uploadedPhotos Photo[]          @relation("PhotoUploader")
+  approvedPhotos Photo[]          @relation("PhotoApprover")
+  scheduledPosts ScheduledPost[]
   contactReplies ContactMessage[] @relation("ContactRepliedBy")
 }
 
@@ -216,6 +219,8 @@ model Page {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
+  blocks PageBlock[]
+
   @@unique([slug, locale])
   @@index([status, locale])
 }
@@ -256,6 +261,7 @@ model Location {
 
   translations LocationTranslation[]
   media        MediaAsset[]
+  photos       Photo[]
 
   @@index([active, orderIndex])
 }
@@ -329,6 +335,7 @@ model Event {
   recurring     RecurringEvent?    @relation(fields: [recurringEventId], references: [id], onDelete: SetNull)
   translations  EventTranslation[]
   media         MediaAsset[]
+  photos        Photo[]
   ticketProduct Product?           @relation(fields: [ticketProductId], references: [id], onDelete: SetNull)
 
   @@index([startsAt, status])
@@ -663,4 +670,163 @@ model EmailLog {
   createdAt  DateTime @default(now())
 
   @@index([to, createdAt])
+}
+
+// ─────────────────────────────────────────────────────────
+// V2 — Analytics, Photos modérées, Social, Gift cards, Page Builder
+// ─────────────────────────────────────────────────────────
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  locale    String?
+  referer   String?
+  ua        String?
+  ip        String?
+  country   String?
+  sessionId String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([path, createdAt])
+  @@index([country, createdAt])
+}
+
+enum PhotoStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PhotoKind {
+  EVENT
+  LOCATION
+  GALLERY
+  PROMO
+}
+
+model Photo {
+  id           String      @id @default(cuid())
+  key          String      @unique
+  mime         String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  alt          String?
+  caption      String?     @db.Text
+  kind         PhotoKind   @default(GALLERY)
+  status       PhotoStatus @default(PENDING)
+  uploadedById String?
+  approvedById String?
+  approvedAt   DateTime?
+  eventId      String?
+  locationId   String?
+  source       String? // "admin", "import-bulk", "instagram"
+  externalUrl  String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  uploadedBy User?     @relation("PhotoUploader", fields: [uploadedById], references: [id], onDelete: SetNull)
+  approvedBy User?     @relation("PhotoApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  event      Event?    @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  location   Location? @relation(fields: [locationId], references: [id], onDelete: SetNull)
+
+  @@index([status, kind, createdAt])
+}
+
+enum SocialChannel {
+  INSTAGRAM
+  FACEBOOK
+  TWITTER
+  TIKTOK
+  LINKEDIN
+  YOUTUBE
+}
+
+enum ScheduledPostStatus {
+  PENDING
+  PUBLISHED
+  FAILED
+  CANCELLED
+}
+
+model ScheduledPost {
+  id          String              @id @default(cuid())
+  channels    SocialChannel[]
+  caption     String              @db.Text
+  mediaUrls   String[]
+  scheduledAt DateTime
+  status      ScheduledPostStatus @default(PENDING)
+  publishedAt DateTime?
+  errorMsg    String?             @db.Text
+  externalIds Json? // { instagram: "...", facebook: "..." }
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  authorId    String?
+
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([status, scheduledAt])
+}
+
+enum GiftCardStatus {
+  ACTIVE
+  REDEEMED
+  EXPIRED
+  CANCELLED
+}
+
+model GiftCard {
+  id              String         @id @default(cuid())
+  code            String         @unique // ex "SC-GIFT-XXXXXX"
+  amountCents     Int
+  currency        String         @default("EUR")
+  buyerEmail      String
+  buyerName       String?
+  recipientEmail  String?
+  recipientName   String?
+  message         String?        @db.Text
+  status          GiftCardStatus @default(ACTIVE)
+  expiresAt       DateTime?
+  redeemedAt      DateTime?
+  redeemedOrderId String?
+  stripeSessionId String?        @unique
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([status, expiresAt])
+  @@index([buyerEmail])
+}
+
+// Page Builder : sections de page composables
+enum BlockKind {
+  HERO_VIDEO
+  HERO_IMAGE
+  TEXT
+  IMAGE
+  CTA
+  GALLERY
+  EVENT_LIST
+  LOCATION_LIST
+  TARIFF_TABLE
+  PARTNERS
+  CONTACT_FORM
+  NEWSLETTER_FORM
+  RAW_HTML
+  EMBED
+}
+
+model PageBlock {
+  id        String    @id @default(cuid())
+  pageId    String
+  kind      BlockKind
+  orderIdx  Int       @default(0)
+  dataJson  Json // contenu spécifique au type de bloc
+  visible   Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([pageId, orderIdx])
 }

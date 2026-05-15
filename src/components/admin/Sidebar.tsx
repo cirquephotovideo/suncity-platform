@@ -11,6 +11,7 @@ const items = [
   { href: '/admin/tarifs', label: 'Tarifs', icon: 'ti-receipt' },
   { href: '/admin/medias', label: 'Médias', icon: 'ti-photo' },
   { href: '/admin/banners', label: 'Bandeaux', icon: 'ti-flag' },
+  { href: '/admin/page-builder', label: 'Page Builder', icon: 'ti-layout-grid' },
   { group: 'Billetterie' },
   { href: '/admin/products', label: 'Produits', icon: 'ti-tag' },
   { href: '/admin/orders', label: 'Commandes', icon: 'ti-shopping-cart' },
