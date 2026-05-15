@@ -1,17 +1,15 @@
 node_modules
 .next
 .git
+.github
+.coolify
+.vscode
+*.log
 .env
 .env.local
-*.log
 .DS_Store
-README.md
-PLAN_PROJET_SunCityDiversity.md
-*.docx
-*.pdf
-!public/posters/*.pdf
-*.png
-!public/**/*.png
-
-# Mobile apps (Expo + iOS native) — pas dans le build web
-apps/
+docker-compose.override.yml
+PHASE_DIFF_SUMMARY.md
+PLAN_SUNCITY_2026.md
+PHASE1_DIFF_SUMMARY.md
+*.tar.gz

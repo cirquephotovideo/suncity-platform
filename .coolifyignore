@@ -1,0 +1,3 @@
+# Coolify ne doit pas voir l'override (sinon conflit ports en prod)
+docker-compose.override.yml
+COOLIFY_DEPLOY.md

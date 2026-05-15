@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+        env:
+          DATABASE_URL: postgres://x:x@x:5432/x?schema=public
+      - name: Prisma format & validate
+        run: |
+          DATABASE_URL=postgres://x:x@x:5432/x?schema=public npx prisma format --check schema || npx prisma format --schema prisma/schema.prisma
+          DATABASE_URL=postgres://x:x@x:5432/x?schema=public npx prisma validate --schema prisma/schema.prisma
+      - name: Type-check
+        run: DATABASE_URL=postgres://x:x@x:5432/x?schema=public npx tsc --noEmit
+
+  build-smoke:
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+        env:
+          DATABASE_URL: postgres://x:x@x:5432/x?schema=public
+      - name: next build (no DB)
+        run: npx next build
+        env:
+          DATABASE_URL: postgres://x:x@x:5432/x?schema=public
+          NEXTAUTH_SECRET: ci-only-not-a-real-secret
+          NEXTAUTH_URL: http://localhost:3000
+          NEXT_PUBLIC_BASE_URL: http://localhost:3000
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build image (smoke, no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: suncity-platform:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
