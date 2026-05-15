@@ -1,3 +1,4 @@
+'use client';
 import type { CSSProperties } from 'react';
 import { V4, MonoLabel } from './V4Atoms';
 import { Link } from '@/i18n/routing';
