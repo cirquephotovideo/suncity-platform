@@ -12,7 +12,7 @@ type GeoResult = {
 };
 
 const HEADERS = {
-  'User-Agent': 'GodLovesDiversity/1.0 (https://godlovesdiversity.com)'
+  'User-Agent': 'GodLovesDiversity/1.0 (https://suncity-platform.com)'
 };
 
 let lastCall = 0;

@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'God Loves Diversity',
+    name: 'Sun City Paris',
     short_name: 'GLD',
     description: 'Mouvement interreligieux pour réconcilier foi et diversité. Communauté LGBT+ inclusive.',
     start_url: '/',

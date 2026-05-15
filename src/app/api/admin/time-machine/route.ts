@@ -17,7 +17,7 @@ export const runtime = 'nodejs';
  */
 
 const GITHUB_OWNER = 'pixeeplay';
-const GITHUB_REPO = 'godlovesdiversity';
+const GITHUB_REPO = 'suncity-platform';
 
 async function requireAdmin() {
   const s = await getServerSession(authOptions);

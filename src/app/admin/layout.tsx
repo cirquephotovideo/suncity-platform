@@ -5,7 +5,7 @@ import { authOptions } from '@/lib/auth';
 import { getMenuPermissions, getUserMenuOverride } from '@/lib/menu-permissions';
 
 export const metadata = {
-  title: 'Back-office — God Loves Diversity'
+  title: 'Back-office — Sun City Paris'
 };
 export const dynamic = 'force-dynamic';
 

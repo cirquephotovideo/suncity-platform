@@ -10,7 +10,7 @@ export const minioClient = new Minio.Client({
   secretKey: process.env.S3_SECRET_KEY || 'gldminio-secret'
 });
 
-export const BUCKET = process.env.S3_BUCKET || 'godlovesdiversity';
+export const BUCKET = process.env.S3_BUCKET || 'suncity-platform';
 
 /**
  * URL d'une ressource pour le navigateur.

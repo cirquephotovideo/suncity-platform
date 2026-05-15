@@ -13,7 +13,7 @@ type Props = {
  * - Web Share API natif si dispo
  * - Sinon fallback : boutons Facebook, X, WhatsApp, Telegram, LinkedIn, Email + copier le lien
  */
-export function SharePhoto({ url, title = 'Photo — God Loves Diversity', hashtags = 'GodLovesDiversity,FoiEtDiversite' }: Props) {
+export function SharePhoto({ url, title = 'Photo — Sun City Paris', hashtags = 'GodLovesDiversity,FoiEtDiversite' }: Props) {
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
 

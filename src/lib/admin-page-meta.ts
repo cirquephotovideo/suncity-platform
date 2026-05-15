@@ -339,7 +339,7 @@ const RULES: MetaRule[] = [
 
 const DEFAULT_META: AdminPageMeta = {
   title: 'Back-office',
-  desc: 'God Loves Diversity — Admin',
+  desc: 'Sun City Paris — Admin',
   emoji: '⚡',
   gradient: 'from-zinc-500 via-zinc-700 to-zinc-900',
   pattern: 'grid',

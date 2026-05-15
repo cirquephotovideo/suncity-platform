@@ -30,7 +30,7 @@ export function StainedGlassVisual({ variant = 'man', className = '', showSilhou
       xmlns="http://www.w3.org/2000/svg"
       className={`w-full h-full ${className}`}
       preserveAspectRatio="xMidYMid slice"
-      aria-label="Vitrail arc-en-ciel — God Loves Diversity"
+      aria-label="Vitrail arc-en-ciel — Sun City Paris"
     >
       <defs>
         {/* Vitrail dégradé sombre */}

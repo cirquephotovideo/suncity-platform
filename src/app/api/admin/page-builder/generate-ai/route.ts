@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
     ? `\nVidéo fournie à inclure : ${videoUrl}`
     : '\nPas de vidéo fournie.';
 
-  const fullPrompt = `Tu es un expert en design web. Génère la STRUCTURE JSON complète d'une page web pour le site "God Loves Diversity" (gld.pixeeplay.com).
+  const fullPrompt = `Tu es un expert en design web. Génère la STRUCTURE JSON complète d'une page web pour le site "Sun City Paris" (gld.pixeeplay.com).
 
 Demande de l'utilisateur :
 "${prompt}"

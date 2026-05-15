@@ -15,10 +15,10 @@ type SeoOpts = {
   noIndex?: boolean;
 };
 
-const SITE_NAME = 'God Loves Diversity';
+const SITE_NAME = 'Sun City Paris';
 const DEFAULT_DESC = "Mouvement interreligieux pour l'inclusion LGBT+. Photos d'églises, mosquées, synagogues et temples du monde entier qui célèbrent la diversité.";
 const KEYWORDS = [
-  'God Loves Diversity', 'foi inclusive', 'religion LGBT', 'église inclusive',
+  'Sun City Paris', 'foi inclusive', 'religion LGBT', 'église inclusive',
   'mosquée inclusive', 'synagogue inclusive', 'spiritualité LGBT', 'théologie queer',
   'diversité religieuse', 'tolérance interreligieuse', 'pride spirituelle',
   'amour universel', 'foi et homosexualité'
@@ -83,14 +83,14 @@ export const organizationJsonLd = {
   logo: `${BASE}/logo.png`,
   description: DEFAULT_DESC,
   sameAs: [
-    'https://www.facebook.com/godlovesdiversity',
-    'https://www.instagram.com/godlovesdiversity',
+    'https://www.facebook.com/suncity-platform',
+    'https://www.instagram.com/suncity-platform',
     'https://twitter.com/GodLovesDiv'
   ],
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
-    email: 'contact@godlovesdiversity.org',
+    email: 'contact@suncity-platform.org',
     availableLanguage: ['French', 'English', 'Spanish', 'Portuguese']
   }
 };
@@ -101,7 +101,7 @@ export function photoJsonLd(p: { id: string; placeName?: string | null; caption?
     '@context': 'https://schema.org',
     '@type': 'ImageObject',
     contentUrl: p.imageUrl,
-    name: p.placeName || 'Photo God Loves Diversity',
+    name: p.placeName || 'Photo Sun City Paris',
     description: p.caption || `Photo prise à ${p.city || ''} ${p.country || ''}`,
     contentLocation: p.city || p.country ? {
       '@type': 'Place',

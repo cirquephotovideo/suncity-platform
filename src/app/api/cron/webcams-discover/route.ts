@@ -112,7 +112,7 @@ export async function GET(req: Request) {
       const known = (await prisma.webcamSource.findMany({ select: { name: true, city: true, channelId: true } }))
         .map(s => `${s.name} (${s.city}) [${s.channelId || 'no-yt'}]`).join('\n');
 
-      const prompt = `Tu es un agent de veille pour la plateforme God Loves Diversity (lieux saints inclusifs / LGBT-friendly).
+      const prompt = `Tu es un agent de veille pour la plateforme Sun City Paris (lieux saints inclusifs / LGBT-friendly).
 
 OBJECTIF : trouver des webcams live YouTube de lieux saints, sanctuaires, basiliques, mosquées, synagogues, temples bouddhistes/hindous/sikhs qui :
 - Diffusent réellement en LIVE (24/7 idéalement, ou aux heures d'office)

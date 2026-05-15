@@ -15,9 +15,9 @@ coverage
 
 # Brief / source assets fournis par l'utilisateur (à ne pas push)
 /A3*.pdf
-/God\ Loves\ Diversity.docx
+/Sun\ City\ Paris.docx
 /cbc1c5c0-*.png
-/PLAN_PROJET_GodLovesDiversity.md
+/PLAN_PROJET_SunCity.md
 
 # docker-compose.override.yml = ports host pour dev local uniquement
 # (Coolify ne doit pas le voir, sinon ça réintroduit le conflit de ports)

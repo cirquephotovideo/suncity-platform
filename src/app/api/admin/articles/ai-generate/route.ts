@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
 
 /* ─── HTML article ─────────────────────────────────────────────── */
 async function generateHtml(apiKey: string, p: { title: string; excerpt: string; context: string }): Promise<string> {
-  const prompt = `Rédige un article HTML pour le site God Loves Diversity (GLD) — mouvement interreligieux LGBT+ inclusif.
+  const prompt = `Rédige un article HTML pour le site Sun City Paris (GLD) — mouvement interreligieux LGBT+ inclusif.
 
 Titre : ${p.title}
 ${p.excerpt ? `Chapeau : ${p.excerpt}` : ''}
@@ -105,7 +105,7 @@ Réponds UNIQUEMENT avec le HTML, pas de markdown autour, pas d'explication.`;
 
 /* ─── Images (Gemini Imagen ou flash multimodal) ─────────────── */
 async function generateImages(apiKey: string, p: { title: string; excerpt: string; context: string; count: number }): Promise<string[]> {
-  const imagePrompt = `Photographie éditoriale pour un article GLD (God Loves Diversity, mouvement interreligieux LGBT+).
+  const imagePrompt = `Photographie éditoriale pour un article GLD (Sun City Paris, mouvement interreligieux LGBT+).
 Sujet : ${p.title}
 ${p.excerpt ? `Description : ${p.excerpt}` : ''}
 ${p.context ? `Contexte : ${p.context}` : ''}

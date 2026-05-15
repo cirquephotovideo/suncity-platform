@@ -11,7 +11,7 @@ import { useEffect, useRef, useState, CSSProperties } from 'react';
  *
  * Usage :
  *   <ParallaxHero
- *     title="God Loves Diversity"
+ *     title="Sun City Paris"
  *     subtitle="Une communauté inclusive"
  *     bgImage="/img/bg-mountains.jpg"
  *     midImage="/img/mid-cloud.png"

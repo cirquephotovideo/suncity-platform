@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { ExternalLink, Code2, Github, Cloud, Cpu, Sparkles, Save, Loader2, FolderOpen, FileText, AlertTriangle } from 'lucide-react';
 
 interface Props {
-  repo: string;        // ex: "pixeeplay/godlovesdiversity"
+  repo: string;        // ex: "pixeeplay/suncity-platform"
   branch: string;
   codeServerUrl: string;  // optional self-hosted code-server (via Tailscale)
 }

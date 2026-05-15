@@ -19,7 +19,7 @@ const DEMO_BLOCKS = [
     effect: 'wow-arrival',
     effectDelay: 0,
     data: {
-      title: 'God Loves Diversity',
+      title: 'Sun City Paris',
       subtitle: 'Une communauté inclusive où chaque foi rencontre chaque amour',
       ctaLabel: 'Découvrir',
       ctaHref: '/about',
@@ -38,7 +38,7 @@ const DEMO_BLOCKS = [
     effect: 'fade-up',
     effectDelay: 100,
     data: {
-      html: '<h2>Bienvenue dans un espace de foi et d\'amour</h2><p>Depuis sa naissance, <strong>God Loves Diversity</strong> rassemble celles et ceux qui refusent le choix entre leur foi et leur identité. Notre mouvement interreligieux est ouvert à toutes les confessions, à toutes les orientations, à toutes les histoires.</p><p>Ici, on prie. On s\'écoute. On apprend. Et surtout, on se sent <em>chez soi</em>.</p>'
+      html: '<h2>Bienvenue dans un espace de foi et d\'amour</h2><p>Depuis sa naissance, <strong>Sun City Paris</strong> rassemble celles et ceux qui refusent le choix entre leur foi et leur identité. Notre mouvement interreligieux est ouvert à toutes les confessions, à toutes les orientations, à toutes les histoires.</p><p>Ici, on prie. On s\'écoute. On apprend. Et surtout, on se sent <em>chez soi</em>.</p>'
     }
   },
   {

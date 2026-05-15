@@ -156,11 +156,11 @@ const INTEGRATIONS: Integration[] = [
       'Va sur github.com/settings/tokens → Generate new token (classic).',
       'Coche le scope `repo`.',
       'Copie le token (commence par `ghp_…`).',
-      'Renseigne owner/repo de la forme `pixeeplay/godlovesdiversity`.'
+      'Renseigne owner/repo de la forme `pixeeplay/suncity-platform`.'
     ],
     fields: [
       { key: 'integrations.github.token', label: 'Personal Access Token', type: 'password', placeholder: 'ghp_…' },
-      { key: 'integrations.github.repo', label: 'Repository (owner/repo)', placeholder: 'pixeeplay/godlovesdiversity' }
+      { key: 'integrations.github.repo', label: 'Repository (owner/repo)', placeholder: 'pixeeplay/suncity-platform' }
     ]
   },
   {

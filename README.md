@@ -1,42 +1,42 @@
-# 🌈 God Loves Diversity
+# 🔥 Sun City Paris — plateforme web
 
-Plateforme militante interreligieuse — front public + back-office + API mobile.
-Stack : **Next.js 14 · PostgreSQL (PostGIS) · Redis · MinIO · Prisma · NextAuth · Gemini · Tailwind**.
+> Site officiel + back-office pour le sauna gay **Sun City Paris** (3000 m² · 62 bd de Sébastopol, 75003).
+> Stack : **Next.js 14 · PostgreSQL 16 · Redis · MinIO · Prisma 5 · NextAuth · Tailwind · next-intl (FR/EN)**.
+> Origine : refonte du repo `pixeeplay/godlovesdiversity` (tag d'archive : `archive/gld-source-pre-suncity`).
+
+⚠️ **Site adulte 18+ · ouvert exclusivement aux hommes** — voir page `/reglement`.
 
 ---
 
-## 🚀 Démarrage local (5 minutes)
+## 🚀 Démarrage local
 
 ### Prérequis
-
 - Docker Desktop (macOS/Windows) ou Docker Engine + Compose (Linux)
 - Node.js 20+ et npm (uniquement pour le mode dev hot-reload)
 
-### Option A — Tout dans Docker (le plus simple)
+### Option A — Tout dans Docker
 
 ```bash
-cp .env.example .env          # adapte si besoin
+cp .env.example .env          # adapter si besoin
 docker compose up --build
 ```
 
 Au premier boot :
 - Postgres, Redis, MinIO, Mailpit démarrent
-- Le bucket MinIO `godlovesdiversity` est créé
+- Le bucket MinIO `suncity` est créé
 - Les migrations Prisma sont appliquées
 - L'admin par défaut est créé via le seed
 
-Ensuite ouvre :
-
 | URL                          | Description |
 |------------------------------|-------------|
-| http://localhost:3000        | Site public |
+| http://localhost:3000        | Site public (FR/EN) |
 | http://localhost:3000/admin  | Back-office |
-| http://localhost:9001        | Console MinIO (gldminio / gldminio-secret) |
+| http://localhost:9001        | Console MinIO (`suncityminio` / `suncityminio-secret`) |
 | http://localhost:8025        | Mailpit (boîte mail de dev) |
 
-**Identifiants admin par défaut** (à changer immédiatement) :
+**Identifiants admin par défaut** (à changer immédiatement en prod) :
 - Email : `arnaud@gredai.com`
-- Mot de passe : `GodLoves2026!`
+- Mot de passe : défini dans `.env` (`ADMIN_PASSWORD`)
 
 ### Option B — Front en hot-reload local + services Docker
 
@@ -49,105 +49,106 @@ npm run db:seed
 npm run dev
 ```
 
-Le front démarre sur http://localhost:3000 et reflète tes changements à chaque sauvegarde.
-
 ---
 
-## 🗂️ Arborescence du projet
+## 🗂️ Arborescence (cible Sun City)
 
 ```
 .
-├── docker-compose.yml          # stack complète (prod-like)
-├── docker-compose.dev.yml      # uniquement les services (DB/Redis/MinIO/Mail)
-├── Dockerfile                  # build du front Next.js
+├── docker-compose.yml          # stack prod-like (Coolify)
+├── docker-compose.dev.yml      # uniquement les services
+├── docker-compose.override.yml # ports localhost en dev
+├── Dockerfile                  # Next standalone multi-stage
 ├── .env.example                # variables d'env documentées
 ├── prisma/
-│   ├── schema.prisma           # modèles : User, Photo, Page, Article, Newsletter…
-│   └── seed.ts                 # admin + démo
+│   ├── schema.prisma           # User, Page, Event, RecurringEvent, Location, Tariff, NewsletterSubscriber, ContactMessage, MediaAsset, SiteSettings, AuditLog
+│   └── seed.ts
+├── scripts/
+│   ├── rebrand-suncity.sh      # purge GLD (Phase 1) — déjà exécuté
+│   └── check-no-gld-residue.sh # garde-fou pre-commit/CI
 ├── src/
+│   ├── middleware.ts           # auth + age-gate cookie check
 │   ├── app/
-│   │   ├── [locale]/           # site public (FR / EN / ES / PT)
-│   │   ├── admin/              # back-office (login, dashboard, modération…)
-│   │   └── api/                # routes API (upload, IA, newsletter, social, mobile)
-│   ├── components/             # UI publique + composants admin
-│   ├── lib/                    # prisma, auth, storage, gemini, email
+│   │   ├── [locale]/           # FR + EN — pages publiques
+│   │   │   ├── page.tsx        # Welcome
+│   │   │   ├── agenda/         # soirées hebdo + à venir
+│   │   │   ├── lieux/          # 5 zones du sauna
+│   │   │   ├── tarifs/         # grille (à créer en P3)
+│   │   │   ├── horaires-acces/ # carte + métro (à créer en P3)
+│   │   │   ├── reglement/      # règles 18+ hommes only
+│   │   │   ├── checkin/        # procédure d'entrée
+│   │   │   ├── contact/        # formulaire Resend
+│   │   │   ├── newsletter/     # double opt-in interne
+│   │   │   ├── blog/           # actualités
+│   │   │   ├── galerie/        # photos modérées
+│   │   │   ├── partenaires/    # Playsafe, AREMEDIA, Star City
+│   │   │   ├── mentions-legales/
+│   │   │   └── rgpd/
+│   │   ├── admin/              # back-office (CRUD pages, agenda, lieux, tarifs, médias, newsletter, settings, audit)
+│   │   └── api/                # auth, newsletter, contact, storage, themes, sitemap, OG, etc.
+│   ├── components/
+│   ├── lib/                    # prisma, auth, mail, storage, theme, age-gate
 │   ├── i18n/                   # routing & messages next-intl
-│   └── messages/               # FR / EN / ES / PT JSON
-└── public/posters/             # affiches téléchargeables (PDF)
+│   └── messages/{fr,en}.json
+└── public/
 ```
 
 ---
 
-## 🌍 Internationalisation
+## 🔞 Age-gate & contenus adultes
 
-Quatre langues pré-câblées : **FR (par défaut), EN, ES, PT**.
-Pour ajouter une langue, créer `src/messages/<code>.json` puis ajouter le code dans `src/i18n/routing.ts`.
-
-URLs : `/`, `/en`, `/es`, `/pt` (préfixe ajouté uniquement quand nécessaire).
-
----
-
-## 🛡️ Modération
-
-- Toute photo uploadée est en **`PENDING`**.
-- L'admin reçoit un email automatique (via Mailpit en dev, Resend en prod).
-- Validation manuelle dans `/admin/moderation`.
-- Préfiltrage IA Gemini Vision : prêt à brancher dans `src/lib/gemini.ts`.
+- Modal 18+ obligatoire à la première visite (cookie `sc_age_ok`, durée 30 j)
+- Refus → redirection vers `/sortie`
+- `<meta name="rating" content="adult">` + OG images SFW (logo + adresse uniquement)
+- Photos d'événements : modération admin obligatoire (`PENDING` par défaut)
+- Mentions légales adulte + CGU à valider par l'avocat de la SARL GYM SEBASTOPOL
 
 ---
 
-## 🤖 IA Gemini
+## 📅 Agenda hebdomadaire récurrent (seed)
 
-Studio dans `/admin/ai` :
-- Génération de **textes** (légendes, articles, posts, témoignages anonymisés)
-- Génération d'**images** (prêt pour Imagen)
-
-Ajoute `GEMINI_API_KEY=...` dans `.env`. Sans clé, les boutons restent fonctionnels mais retournent un message stub.
-
----
-
-## 📅 Calendrier social
-
-Dans `/admin/calendar`, planifie un post unifié vers Instagram, Facebook, X, LinkedIn, TikTok.
-Le worker BullMQ (à déployer en V1.5) consommera la file `social-publish` pour publier au bon moment.
-
-Variables d'env à renseigner pour activer chaque canal :
-- Meta : `META_APP_ID`, `META_APP_SECRET`, `INSTAGRAM_BUSINESS_ID`
-- X : `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_TOKEN_SECRET`
-- LinkedIn : `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET`
-- TikTok : `TIKTOK_CLIENT_KEY`, `TIKTOK_CLIENT_SECRET`
+| Jour | Soirée | Tarif/note |
+|---|---|---|
+| Lundi | « 18€ » | 18€ avec inscription externe |
+| Mardi | NASTY BOYS | -26 ans : 10€ |
+| Mer 1+3 | BOLLYWOOD PARTY | maj sur Facebook |
+| Mer 2+4 | AFTERWORK KARAOKE | hôtes Kyssy Bang Bang & Cyril Kortez |
+| Jeudi | Happy Hour | 1 bière offerte pour 1 achetée |
+| Vendredi | Dépistage VIH/IST | 19h–23h, partenaire AREMEDIA |
+| Samedi 2 | Bears | dès midi |
+| Dimanche | GTD Gay Tea Dance | dès 17h |
 
 ---
 
-## 📬 Newsletter
+## 🎨 Thème "Sun"
 
-- Formulaire d'inscription avec **double opt-in RGPD**
-- Confirmation par email
-- Désinscription en 1 clic (token dédié)
-- Éditeur HTML simple dans `/admin/newsletter` + bouton **"brouillon par IA"**
-- Notification automatique de l'admin à chaque nouvelle inscription
+Palette par défaut (configurable dans `/admin/themes`) :
+- `--sun-gold #C9A24B`
+- `--sun-copper #B66B3A`
+- `--sun-night #0E1626`
+- `--sun-cream #F2E8D5`
 
-En dev les emails sont visibles dans Mailpit (http://localhost:8025).
-En prod, ajouter `RESEND_API_KEY=...` pour l'envoi via Resend.
+Typo : Display `Bodoni Moda` ou `Playfair Display`, body `Inter`. Mode sombre par défaut.
 
 ---
 
-## 📱 App mobile (V2)
+## 💌 Newsletter
 
-Endpoint dédié : `POST /api/mobile/upload`
-Header : `X-Device-Token: <token>` (à générer dans le BO `Settings → API Keys` — V1.5)
-
-L'app Expo sera ajoutée dans un dossier `apps/mobile/` (V2). Elle réutilise 100 % de cette API.
+- Double opt-in RGPD
+- Confirmation par email (Mailpit en dev, Resend en prod)
+- Désinscription en 1 clic via token dédié
+- Notification automatique de l'admin à chaque inscription
+- Éditeur HTML simple dans `/admin/newsletter`
 
 ---
 
 ## 🚢 Déploiement Coolify
 
-1. Pousse ce repo sur GitHub :
+1. Push ce repo sur GitHub :
    ```bash
-   git init && git add . && git commit -m "feat: initial GLD platform"
+   git init && git add . && git commit -m "feat: suncity-platform initial release"
    git branch -M main
-   git remote add origin git@github.com:<toi>/<repo>.git
+   git remote add origin git@github.com:<GITHUB_REPO>.git
    git push -u origin main
    ```
 
@@ -155,59 +156,40 @@ L'app Expo sera ajoutée dans un dossier `apps/mobile/` (V2). Elle réutilise 10
    - Source : ton repo GitHub
    - Branch : `main`
    - Compose file : `docker-compose.yml`
-   - Domains :
-     - `web` → `godlovesdiversity.com`
-     - (optionnel) `minio` → `cdn.godlovesdiversity.com`
+   - Domaine : `<DOMAIN>` (staging d'abord, ex `sun.<staging-domain>`)
 
-3. Variables d'env à définir dans Coolify (copier depuis `.env.example`) :
-   - `DATABASE_URL`, `REDIS_URL` → utilisent les services internes
-   - `NEXTAUTH_URL=https://godlovesdiversity.com`
-   - `NEXTAUTH_SECRET` → `openssl rand -base64 32`
-   - `ADMIN_EMAIL`, `ADMIN_PASSWORD`
-   - `S3_PUBLIC_ENDPOINT=https://cdn.godlovesdiversity.com`
-   - `RESEND_API_KEY`, `GEMINI_API_KEY` → quand tu les as
-   - Tokens des réseaux sociaux
+3. Variables d'env à définir dans Coolify (copier depuis `.env.example`).
+   Secrets indispensables : `NEXTAUTH_SECRET`, `RESEND_API_KEY`, `ADMIN_PASSWORD`, `MINIO_ROOT_PASSWORD`, optionnel `GEMINI_API_KEY`.
 
-4. **Deploy**. Coolify build le Dockerfile, applique les migrations Prisma au boot, et expose le service.
+4. **Deploy**. Coolify build le Dockerfile, applique les migrations Prisma au boot, expose le service via `SERVICE_FQDN_WEB_3000`.
 
-5. Backup Postgres : active **Coolify → Database → Backups → Daily**.
+5. Backup Postgres : Coolify → Database → Backups → Daily ON.
+
+6. Cutover domaine final `suncity-paris.fr` quand QA verte (DNS + cert Let's Encrypt + 301 mapping vieux slugs WordPress).
 
 ---
 
-## 🧪 Vérifications après boot
+## 🛡️ Garde-fous
 
-- [ ] http://localhost:3000 affiche le hero "GOD ❤️ DIVERSITY"
-- [ ] Changer la langue (top-right) fonctionne (FR/EN/ES/PT)
-- [ ] http://localhost:3000/galerie montre les 4 photos de démo
-- [ ] http://localhost:3000/participer permet d'uploader (la photo apparaît dans `/admin/moderation`)
-- [ ] http://localhost:3000/admin/login → connexion avec les identifiants par défaut
-- [ ] http://localhost:8025 affiche les emails de notification admin et de double opt-in
-- [ ] L'icône MinIO (http://localhost:9001) montre le bucket `godlovesdiversity` avec les uploads
-
----
-
-## 📦 Ce qui n'est pas inclus en V1 (et pourquoi)
-
-| Fonctionnalité           | Statut V1 | Notes |
-|--------------------------|-----------|-------|
-| Carte interactive Mapbox | UI prête, à ajouter | Ajouter `NEXT_PUBLIC_MAPBOX_TOKEN` puis composant `<MapWorld />` |
-| Workers BullMQ           | API prête, worker non démarré | Microservice à ajouter (`apps/worker`) en V1.5 |
-| Publication réelle multi-réseaux | Endpoints à connecter | Intégrer SDK Meta / X / LinkedIn quand tokens fournis |
-| Imagen (image gen)       | wiring stub | activer via `GEMINI_API_KEY` |
-| App mobile Expo          | V2 | endpoint `/api/mobile/upload` déjà prêt |
-
----
-
-## 🤝 Conventions
-
-- TypeScript strict
-- Tailwind utility-first (pas de CSS modules)
-- Server Components par défaut, `'use client'` seulement quand nécessaire
+- `scripts/check-no-gld-residue.sh` — exécuter avant chaque PR pour vérifier qu'aucun résidu GLD/Connect/Identités/multi-domain ne réapparaît
+- TypeScript strict (le `ignoreBuildErrors: true` de l'origine sera retiré en P7)
 - Toutes les actions admin journalisées dans `AuditLog`
 
 ---
 
 ## 📞 Support
 
-Email admin : `arnaud@gredai.com`
-Hashtag : `#GodLovesDiversity`
+- Adresse : 62 boulevard de Sébastopol, 75003 Paris
+- Téléphone : 01 40 09 26 09
+- Société éditrice : SARL GYM SEBASTOPOL — RCS 45274626600025
+- Email admin : `arnaud@gredai.com`
+
+---
+
+## 📊 Origine
+
+Refonte du projet **God Loves Diversity** (`pixeeplay/godlovesdiversity@b421449`).
+
+Tag d'archive de la source pré-purge : `archive/gld-source-pre-suncity`.
+
+Voir `PLAN_SUNCITY_2026.md` (à la racine du dossier de travail) pour le plan complet par phases.

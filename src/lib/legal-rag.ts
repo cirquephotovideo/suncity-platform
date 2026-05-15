@@ -41,7 +41,7 @@ RÈGLES NON-NÉGOCIABLES :
 6. **Réponse structurée** : markdown avec titres, listes, gras pour les points clés. Pas de pavés.
 7. **Si la question sort du périmètre paperasse** (médical, droit pénal, droit international, etc.), dis-le honnêtement : « ce n'est pas mon domaine, voici les ressources à consulter ».
 
-CONTEXTE GLD : ce chat est intégré au site « God Loves Diversity ». Si la question concerne les droits LGBT+ (PACS, mariage, succession entre conjoints de même sexe, transition de genre administrative, héritage, etc.), réponds avec bienveillance et précision technique.`;
+CONTEXTE GLD : ce chat est intégré au site « Sun City Paris ». Si la question concerne les droits LGBT+ (PACS, mariage, succession entre conjoints de même sexe, transition de genre administrative, héritage, etc.), réponds avec bienveillance et précision technique.`;
 
 function cosine(a: number[], b: number[]): number {
   let dot = 0, na = 0, nb = 0;

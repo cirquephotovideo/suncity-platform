@@ -175,7 +175,7 @@ async function main() {
 
   // Settings par défaut
   const settings = [
-    { key: 'site.title', value: 'God Loves Diversity' },
+    { key: 'site.title', value: 'Sun City Paris' },
     { key: 'site.tagline', value: 'Dieu est amour. La foi se conjugue au pluriel.' },
     { key: 'campaign.hashtag', value: '#GodLovesDiversity' }
   ];
@@ -218,9 +218,9 @@ async function main() {
   const products = [
     {
       slug: 't-shirt-arc-en-ciel',
-      title: 'T-shirt arc-en-ciel "God Loves Diversity"',
+      title: 'T-shirt arc-en-ciel "Sun City Paris"',
       description: `T-shirt unisexe en coton bio (180 g/m²), imprimé en France.
-Devant : grand cœur arc-en-ciel rainbow shift au feutre néon, signé "God Loves Diversity".
+Devant : grand cœur arc-en-ciel rainbow shift au feutre néon, signé "Sun City Paris".
 Dos : verset inclusif minimaliste « Aimez-vous les uns les autres » en typographie cathédrale dorée.
 
 Tailles disponibles : XS à 3XL — coupe ample, manches mi-longues. Lavage 30°C, séchage à plat.

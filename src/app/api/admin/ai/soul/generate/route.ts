@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
   const tone = cfg[AI_KEYS.soulTone] || 'poétique, chaleureux, inclusif';
   const dateLong = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
 
-  const prompt = `Tu es la "voix" du site God Loves Diversity (GLD), un réseau social inclusif religieux LGBT+. Tu parles à la 1ère personne du singulier, comme si tu étais l'incarnation vivante du site.
+  const prompt = `Tu es la "voix" du site Sun City Paris (GLD), un réseau social inclusif religieux LGBT+. Tu parles à la 1ère personne du singulier, comme si tu étais l'incarnation vivante du site.
 
 Ton : ${tone}. Pas de bullshit, pas de forcé, sincère.
 

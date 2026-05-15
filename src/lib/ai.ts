@@ -17,7 +17,7 @@ async function getKey() {
 }
 
 const SYSTEM_BRAND = `
-Tu es l'assistant éditorial du mouvement "God Loves Diversity".
+Tu es l'assistant éditorial du mouvement "Sun City Paris".
 Ligne éditoriale :
 - Inclusive (jamais opposante, jamais polémique)
 - Apaisée (ton chaleureux, lumineux)
@@ -79,7 +79,7 @@ export async function aiCaptionImage(imageUrl: string, words = 80) {
 
 export async function aiPolishTestimony(rawText: string, anonymize = true) {
   return gemini({
-    prompt: `Réécris ce témoignage brut pour publication sur le site God Loves Diversity.
+    prompt: `Réécris ce témoignage brut pour publication sur le site Sun City Paris.
 ${anonymize ? '- Anonymise (supprime noms, lieux précis, numéros).' : ''}
 - Ton lumineux et chaleureux, jamais victimaire ni polémique.
 - 100 mots maximum.
@@ -110,7 +110,7 @@ Renvoie un JSON valide : { "variants": [ { "version": 1, "content": "..." }, ...
 
 export async function aiNewsletterMonth(stats: any) {
   return gemini({
-    prompt: `Rédige une newsletter mensuelle pour le mouvement God Loves Diversity, en HTML simple (pas de <html>/<body>).
+    prompt: `Rédige une newsletter mensuelle pour le mouvement Sun City Paris, en HTML simple (pas de <html>/<body>).
 Statistiques du mois :
 ${JSON.stringify(stats, null, 2)}
 
@@ -159,7 +159,7 @@ Texte original : """${text}"""`
 
 export async function aiVerseOfTheDay(theme?: string) {
   return gemini({
-    prompt: `Rédige un message inspirant quotidien pour les abonnés de God Loves Diversity.
+    prompt: `Rédige un message inspirant quotidien pour les abonnés de Sun City Paris.
 ${theme ? `Thème : ${theme}` : ''}
 - 1 ou 2 phrases courtes, lumineuses, inclusives
 - Ton spirituel mais non confessionnel
@@ -206,7 +206,7 @@ ${items.map((it) => `[${it.id}] ${it.text.slice(0, 200)}`).join('\n')}`,
 
 export async function aiWeeklyDigest(stats: any) {
   return gemini({
-    prompt: `Rédige une synthèse hebdomadaire pour l'admin du mouvement God Loves Diversity.
+    prompt: `Rédige une synthèse hebdomadaire pour l'admin du mouvement Sun City Paris.
 Stats brutes : ${JSON.stringify(stats)}
 Format Markdown, 6-8 puces, ton de coach (énergique, factuel). Termine par 1 reco d'action prioritaire.`
   });
@@ -242,7 +242,7 @@ export async function aiInclusiveChat(question: string, history: { role: 'user' 
     ...history.map((h) => ({ role: h.role, parts: [{ text: h.text }] })),
     { role: 'user', parts: [{ text: question }] }
   ];
-  const system = `Tu es "GLD", l'assistant inclusif du mouvement God Loves Diversity.
+  const system = `Tu es "GLD", l'assistant inclusif du mouvement Sun City Paris.
 Tu réponds aux questions sur la lecture inclusive des textes sacrés (Bible, Coran, Torah, textes hindous/bouddhistes), la place des personnes LGBT+ dans la foi, et l'histoire du mouvement.
 Règles strictes :
 - Toujours apaisé, jamais polémique, jamais militant

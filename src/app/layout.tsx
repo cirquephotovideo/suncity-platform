@@ -14,12 +14,12 @@ const themeInitScript = `
 `.trim();
 
 export const metadata: Metadata = {
-  title: 'God Loves Diversity',
+  title: 'Sun City Paris',
   description:
     'Mouvement interreligieux pour réconcilier foi et diversité. Dieu est amour.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   openGraph: {
-    title: 'God Loves Diversity',
+    title: 'Sun City Paris',
     description: 'Dieu est amour. La foi se conjugue au pluriel.',
     type: 'website'
   }

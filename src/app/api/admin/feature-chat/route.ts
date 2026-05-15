@@ -17,7 +17,7 @@ export const maxDuration = 60;
  * Notifie aussi via Telegram pour ne pas perdre l'idée.
  */
 
-const SYSTEM = `Tu es Architecte Produit pour le projet "God Loves Diversity" (gld.pixeeplay.com), un réseau social interreligieux LGBT+.
+const SYSTEM = `Tu es Architecte Produit pour le projet "Sun City Paris" (gld.pixeeplay.com), un réseau social interreligieux LGBT+.
 
 Stack actuel :
 - Next.js 14 App Router · TypeScript strict · Prisma 5 sur Postgres

@@ -166,7 +166,7 @@ export function PageBuilderEditor({ slug }: { slug: string }) {
       cta:     { label: 'Cliquer ici', href: '/' },
       hero:    { title: 'Titre Hero', subtitle: 'Sous-titre', cta: { label: 'CTA', href: '/' }, bgImage: '' },
       'parallax-hero': {
-        title: 'God Loves Diversity',
+        title: 'Sun City Paris',
         subtitle: 'Une communauté inclusive où chacun trouve sa place',
         ctaLabel: 'Découvrir',
         ctaHref: '/about',

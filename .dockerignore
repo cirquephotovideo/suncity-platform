@@ -6,7 +6,7 @@ node_modules
 *.log
 .DS_Store
 README.md
-PLAN_PROJET_GodLovesDiversity.md
+PLAN_PROJET_SunCityDiversity.md
 *.docx
 *.pdf
 !public/posters/*.pdf

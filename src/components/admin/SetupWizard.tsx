@@ -61,7 +61,7 @@ const STEPS: Step[] = [
     ],
     fields: [
       { key: 'integrations.resend.apiKey', label: 'Clé API Resend', type: 'password', placeholder: 're_…' },
-      { key: 'integrations.resend.from', label: 'Email expéditeur', placeholder: '"GLD" <hello@godlovesdiversity.com>' }
+      { key: 'integrations.resend.from', label: 'Email expéditeur', placeholder: '"GLD" <hello@suncity-platform.com>' }
     ]
   },
 
