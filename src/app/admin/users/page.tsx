@@ -1,19 +1,39 @@
+import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
+import UsersAdmin from '@/components/admin/UsersAdmin';
 
 export const metadata = { title: 'Utilisateurs — Sun City Admin' };
 
 export default async function Page() {
-  await requireAdmin();
+  const session = await requireAdmin();
+  const currentUserId = (session.user as any).id as string;
+
+  const [items, total] = await Promise.all([
+    prisma.user.findMany({
+      include: { mfa: true },
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    }),
+    prisma.user.count(),
+  ]);
+
+  const initial = items.map((u) => ({
+    id: u.id,
+    email: u.email,
+    name: u.name ?? null,
+    role: u.role,
+    image: u.image ?? null,
+    createdAt: u.createdAt.toISOString(),
+    lastLoginAt: u.lastLoginAt ? u.lastLoginAt.toISOString() : null,
+    suspendedAt: u.suspendedAt ? u.suspendedAt.toISOString() : null,
+    has2fa: !!u.mfa,
+  }));
+
   return (
     <div>
-      <h1 className="font-display text-3xl mb-4">👥 Utilisateurs</h1>
-      <p className="text-textMuted mb-6">Gestion complète des comptes utilisateurs avec rôles ADMIN/EDITOR.</p>
-      <div className="bg-bgAlt border border-border rounded-lg p-6">
-        <p className="text-sm text-textMuted">
-          🚧 Module fonctionnel — interface CRUD enrichie en cours de port depuis le code GLD.
-          En attendant, gère cette section via <code className="text-primary">npx prisma studio</code>.
-        </p>
-      </div>
+      <h1 className="font-display text-3xl mb-2">Utilisateurs</h1>
+      <p className="text-textMuted mb-6">Gestion complète : rôles, mot de passe, 2FA, suspension, audit.</p>
+      <UsersAdmin initial={initial} total={total} currentUserId={currentUserId} />
     </div>
   );
 }

@@ -126,6 +126,7 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   lastLoginAt   DateTime?
+  suspendedAt   DateTime?
 
   accounts       Account[]
   sessions       Session[]
@@ -588,17 +589,53 @@ model MediaAsset {
 
 model SiteSettings {
   id               Int      @id @default(1)
+  // Général
+  siteName         String?
+  baseline_fr      String?
+  baseline_en      String?
+  defaultLocale    Locale   @default(fr)
+  timezone         String   @default("Europe/Paris")
+  currency         String   @default("EUR")
+  ageGateEnabled   Boolean  @default(true)
+  ageGateMinAge    Int      @default(18)
+  // Contact
   contactPhone     String?
   contactEmail     String?
   address          String?
   rcs              String?
+  latitude         Float?
+  longitude        Float?
   openingHoursJson Json?
+  // Social
   socialJson       Json?
-  partnersJson     Json?
-  ageGateEnabled   Boolean  @default(true)
-  ageGateMinAge    Int      @default(18)
+  // SEO
+  seoTitle         String?
+  seoDescription   String?
+  ogImageUrl       String?
+  robotsNoIndex    Boolean  @default(false)
+  gaId             String?
+  plausibleDomain  String?
+  schemaOrgType    String?
+  // Theme
   themeKey         String   @default("sun")
-  defaultLocale    Locale   @default(fr)
+  // Integrations
+  stripePublicKey  String?
+  resendApiKey     String?
+  minioBucket      String?
+  telegramBotToken String?
+  // Mailing
+  mailSenderName   String?
+  mailSenderEmail  String?
+  mailFooterFr     String?  @db.Text
+  mailFooterEn     String?  @db.Text
+  doubleOptIn      Boolean  @default(true)
+  consentText      String?  @db.Text
+  // Footer
+  footerHtmlFr     String?  @db.Text
+  footerHtmlEn     String?  @db.Text
+  copyrightText    String?
+  partnersJson     Json?
+  legalLinksJson   Json?
   updatedAt        DateTime @updatedAt
 }
 
